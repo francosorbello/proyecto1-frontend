@@ -15,6 +15,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { Dashboard as DashboardIcon} from '@mui/icons-material';
 import NavBarItem from './NavBarItem';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 function Copyright(props) {
   return (
@@ -131,9 +132,9 @@ function DashboardContent() {
           </Toolbar>
           <Divider />
           <List>
-            {
-                <NavBarItem icon={<DashboardIcon />} title="Dashboard"/>
-            }
+              <NavBarItem icon={<DashboardIcon />} path="/" title="Dashboard"/>
+              <NavBarItem icon={<DashboardIcon />} path="/test" title="Donaciones"/>
+              {/* <NavBarItem icon={<DashboardIcon />} title="Campañas"/> */}
           </List>
         </Drawer>
         <Box
@@ -150,13 +151,15 @@ function DashboardContent() {
         >
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-
+                <Route path="/test" exact={true} component={Test}></Route>
           </Container>
         </Box>
       </Box>
     </ThemeProvider>
   );
 }
+
+const Test = () => <div style={{flexGrow: 1}}><h1>Prueba Routes</h1></div>
 
 export default function Dashboard() {
   return <DashboardContent />;
