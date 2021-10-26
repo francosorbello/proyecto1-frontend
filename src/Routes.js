@@ -1,15 +1,15 @@
 import React from 'react'
 import {BrowserRouter, Switch, Route} from 'react-router-dom'
 import Dashboard from './components/Dashboard'
-import NavBar from './components/NavBar'
 
 
 function Routes() {
+  const loggedIn = true;
   return (
     <div>
       <BrowserRouter>
         <Switch>
-            <Route path="/" component={Dashboard}></Route>
+            <Route path="/"> {loggedIn ? <Dashboard/> : <h1>Logeate</h1>} </Route>
         </Switch>
       </BrowserRouter>
     </div>

@@ -13,22 +13,13 @@ import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import { Dashboard as DashboardIcon} from '@mui/icons-material';
+import { Campaign as CampaignIcon, Dashboard as DashboardIcon, MarkunreadMailbox, Tag as TagIcon} from '@mui/icons-material';
 import NavBarItem from './NavBarItem';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import Campaigns from "../components/Campaigns"
+import CampaignContextProvider from '../contexts/CampaignContext';
+import DashboardContent from './DashboardContent';
 
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 const drawerWidth = 240;
 
@@ -78,7 +69,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 const mdTheme = createTheme();
 
-function DashboardContent() {
+export default function Dashboard() {
   const [open, setOpen] = React.useState(false);
   const toggleDrawer = () => {
     setOpen(!open);
@@ -132,9 +123,9 @@ function DashboardContent() {
           </Toolbar>
           <Divider />
           <List>
-              <NavBarItem icon={<DashboardIcon />} path="/" title="Dashboard"/>
-              <NavBarItem icon={<DashboardIcon />} path="/test" title="Donaciones"/>
-              {/* <NavBarItem icon={<DashboardIcon />} title="Campañas"/> */}
+              <NavBarItem icon={<CampaignIcon />} path="/dashboard/campañas" title="Campañas"/>
+              <NavBarItem icon={<MarkunreadMailbox />} path="/dashboard/donaciones" title="Donaciones"/>
+              <NavBarItem icon={<TagIcon />} path="/dashboard/tags" title="Tags"/>
           </List>
         </Drawer>
         <Box
@@ -151,7 +142,15 @@ function DashboardContent() {
         >
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                <Route path="/test" exact={true} component={Test}></Route>
+                <Route path="/dashboard/campañas" exact={true}>
+                  <DashboardContent title="Campañas">
+                    <CampaignContextProvider>
+                      <Campaigns></Campaigns>
+                    </CampaignContextProvider>
+                  </DashboardContent>
+                </Route>
+                <Route path="/dashboard/donaciones" exact={true} component={Test}></Route>
+                <Route path="/dashboard/tags" exact={true} component={Test}></Route>
           </Container>
         </Box>
       </Box>
@@ -159,8 +158,8 @@ function DashboardContent() {
   );
 }
 
-const Test = () => <div style={{flexGrow: 1}}><h1>Prueba Routes</h1></div>
+const Test = () => <div ><h1>Prueba Routes</h1></div>
 
-export default function Dashboard() {
-  return <DashboardContent />;
-}
+// export default function Dashboard() {
+//   return <DashboardContent />;
+// }
