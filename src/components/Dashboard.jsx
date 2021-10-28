@@ -19,6 +19,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Campaigns from "../components/Campaigns"
 import CampaignContextProvider from '../contexts/CampaignContext';
 import DashboardContent from './DashboardContent';
+import CampaignForm from './CampaignForm';
 
 
 const drawerWidth = 240;
@@ -82,7 +83,6 @@ export default function Dashboard() {
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
-        /** Appbar */
         <AppBar position="absolute" open={open}>
           <Toolbar
             sx={{
@@ -112,8 +112,6 @@ export default function Dashboard() {
             </Typography>
           </Toolbar>
         </AppBar>
-
-        /**Drawer */
         <Drawer variant="permanent" open={open}>
           <Toolbar
             sx={{
@@ -134,8 +132,6 @@ export default function Dashboard() {
               <NavBarItem icon={<TagIcon />} path="/dashboard/tags" title="Tags"/>
           </List>
         </Drawer>
-        
-        /** Contenido del dashboard */
         <Box
           component="main"
           sx={{
@@ -158,7 +154,7 @@ export default function Dashboard() {
                   </DashboardContent>
                 </Route>
                 <Route path="/dashboard/donaciones" exact={true} component={Test}></Route>
-                <Route path="/dashboard/tags" exact={true} component={Test}></Route>
+                <Route path="/dashboard/tags" exact={true} component={CampaignForm}></Route>
           </Container>
         </Box>
       </Box>

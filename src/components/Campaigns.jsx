@@ -16,7 +16,9 @@ const style = {
 
 /** Campos de las columnas */
 const columns = [
-    // {field: "id",headerName: "ID", width: 130},
+    //el field de las columnas tiene que matchear con los nombres de los valores del server
+    //ej: en el server, la fecha de fin se almacena en "endDate". 
+    //El field de la columna que tenga las fechas de fin tambien debe ser "endDate"
     {field: "name",headerName: "Nombre", width: 300},
     {field: "description",headerName: "Descripcion", width: 130},
     {field: "initialDate",headerName: "Fecha Inicio", width: 130},

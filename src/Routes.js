@@ -9,6 +9,7 @@ function Routes() {
     <div>
       <BrowserRouter>
         <Switch>
+            {/* TODO: implementar login */}
             <Route path="/"> {loggedIn ? <Dashboard/> : <h1>Logeate</h1>} </Route>
         </Switch>
       </BrowserRouter>
