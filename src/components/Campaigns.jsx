@@ -2,7 +2,7 @@ import { Add, Delete, Edit, Title } from '@mui/icons-material'
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, IconButton, Fab } from '@mui/material'
 import React, { useContext } from 'react'
 import { CampaignContext } from '../contexts/CampaignContext'
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 
 const style = {
     margin: 0,
@@ -15,7 +15,7 @@ const style = {
 
 const columns = [
     // {field: "id",headerName: "ID", width: 130},
-    {field: "name",headerName: "Nombre", width: 130},
+    {field: "name",headerName: "Nombre", width: 300},
     {field: "description",headerName: "Descripcion", width: 130},
     {field: "initialDate",headerName: "Fecha Inicio", width: 130},
     {field: "endDate",headerName: "Fecha Fin", width: 130},
@@ -55,6 +55,12 @@ const Campaigns = () => {
                 columns={columns}
                 pageSize={5}
                 rowsPerPageOptions={[5]}
+                components={{
+                    Toolbar: GridToolbar,
+                  }}
+                // filterModel={{
+                //     items: []
+                // }}
             >
             </DataGrid>
             <Fab color="primary" aria-label="add" style={style}>
