@@ -1,9 +1,10 @@
 import { Add, Delete, Edit, Title } from '@mui/icons-material'
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, IconButton, Fab } from '@mui/material'
+import {IconButton, Fab } from '@mui/material'
 import React, { useContext } from 'react'
 import { CampaignContext } from '../contexts/CampaignContext'
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 
+/** Estilo para que el FAB se vea abajo a la derecha */
 const style = {
     margin: 0,
     top: 'auto',
@@ -13,6 +14,7 @@ const style = {
     position: 'fixed',
 };
 
+/** Campos de las columnas */
 const columns = [
     // {field: "id",headerName: "ID", width: 130},
     {field: "name",headerName: "Nombre", width: 300},
@@ -45,6 +47,11 @@ const columns = [
     }
 ]
 
+/** 
+ * Muestra una tabla con las campañas activas.
+ * 
+ * Permite editar,borrar y crear nuevas campañas.
+*/
 const Campaigns = () => {
     const {campaigns} = useContext(CampaignContext);
     return (
@@ -58,9 +65,6 @@ const Campaigns = () => {
                 components={{
                     Toolbar: GridToolbar,
                   }}
-                // filterModel={{
-                //     items: []
-                // }}
             >
             </DataGrid>
             <Fab color="primary" aria-label="add" style={style}>

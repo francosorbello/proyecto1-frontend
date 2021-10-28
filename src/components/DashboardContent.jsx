@@ -1,6 +1,9 @@
 import { Container, CssBaseline, Paper, Typography } from '@mui/material'
 import React from 'react'
 
+/** Renderiza los children del componente dentro de un container con un titulo. 
+ * @title Titulo del container
+*/
 function DashboardContent(props) {
     return (
         <div>

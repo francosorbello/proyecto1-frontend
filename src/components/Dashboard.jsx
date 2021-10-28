@@ -23,6 +23,7 @@ import DashboardContent from './DashboardContent';
 
 const drawerWidth = 240;
 
+/** Animación abrir/cerrar AppBar */
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
@@ -41,6 +42,7 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
+/** Animación abrir/cerrar Drawer */
 const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
     '& .MuiDrawer-paper': {
@@ -69,6 +71,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 const mdTheme = createTheme();
 
+/** Renderiza el appbar que contiene los links para ir a las distintas partes del sistema */
 export default function Dashboard() {
   const [open, setOpen] = React.useState(false);
   const toggleDrawer = () => {
@@ -79,6 +82,7 @@ export default function Dashboard() {
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
+        /** Appbar */
         <AppBar position="absolute" open={open}>
           <Toolbar
             sx={{
@@ -108,6 +112,8 @@ export default function Dashboard() {
             </Typography>
           </Toolbar>
         </AppBar>
+
+        /**Drawer */
         <Drawer variant="permanent" open={open}>
           <Toolbar
             sx={{
@@ -128,6 +134,8 @@ export default function Dashboard() {
               <NavBarItem icon={<TagIcon />} path="/dashboard/tags" title="Tags"/>
           </List>
         </Drawer>
+        
+        /** Contenido del dashboard */
         <Box
           component="main"
           sx={{

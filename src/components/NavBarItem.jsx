@@ -4,6 +4,11 @@ import React, { Component } from 'react'
 import { PropTypes } from 'prop-types'
 import { Link, useHistory } from 'react-router-dom'
 
+/** Boton que redirecciona a un route cuando es clickeado 
+ * @icon icono del boton
+ * @title nombre del boton
+ * @path route al que redireccionar
+*/
 const NavBarItem = ({ icon, title, path }) => {
 
   const handleClick = () => {
