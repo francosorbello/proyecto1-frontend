@@ -4,10 +4,11 @@ import { Box } from '@mui/system';
 // import DateAdapter from '@mui/';
 // import LocalizationProvider from '@mui/lab/LocalizationProvider';
 
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import ReactDatePicker from 'react-datepicker';
 // import required react-datepicker styling file
 import "react-datepicker/dist/react-datepicker.css";
+import { CampaignContext } from '../contexts/CampaignContext';
 
 const fabStyle = {
     margin: 0,
@@ -31,24 +32,75 @@ const style = {
     p: 4,
   };
 
-const CampaignForm = ({campaign}) => {
+const CampaignForm = ({campaign, onSubmit}) => {
+    /** states del componente */
     const [campaignName, setCampaignName] = useState("");
     const [description,setDescription] = useState("");
     const [initialDate, setInitialDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
+    const {campaigns,setCampaigns} = useContext(CampaignContext);
+
+    const formatDate = (date) => {
+        const year = date.getFullYear();
+
+        var month = date.getUTCMonth() + 1;
+        month = month < 10 ? "0"+month : month;
+
+        var day = date.getDate();
+        day = day < 10 ? "0"+day : day;
+
+        return year + "-" + month + "-" + day
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if(campaign == null) {
+            //TODO: verificar que los campos esten completados
+            const nCampaign = {
+                "name": campaignName,
+                "description": description,
+                "initialDate": formatDate(initialDate),
+                "endDate": formatDate(endDate)
+            }
+            const res = await fetch("http://127.0.0.1:8000/api/campaign-api/",{
+                method: "POST",
+                headers: {
+                    'Content-type': 'application/json',
+                },
+                body: JSON.stringify(nCampaign)
+            })
+            if(res.status == "200") {
+                const resJ = await res.json();
+                const campaignFormat = {
+                    "id": resJ["id"],
+                    "name": nCampaign.name,
+                    "description": nCampaign.description,
+                    "initialDate": nCampaign.initalDate,
+                    "endDate": nCampaign.endDate,
+                }
+                //actualizo el context global
+                onSubmit(campaignFormat)
+                setCampaigns([...campaigns,campaignFormat])
+
+            } else {
+                alert("Hubo un problema al conectarse con la base de datos.")
+            }
+        }
+    }
     
+    /**Si hay una campaña de entrada, setea los valores para que podamos editar */
     useEffect(() => {
         if(campaign != null){
             setCampaignName(campaign.name)
             setDescription(campaign.description)
-            setInitialDate(campaign.initialDate)
-            setEndDate(campaign.endDate)
+            setInitialDate(new Date(campaign.initialDate))
+            setEndDate(new Date(campaign.endDate))
         }
     }, [])
 
     return (
         <div>
-            <form autoComplete="off" >
+            <form autoComplete="off" onSubmit={handleSubmit}>
                 <Grid container spacing={3}>
                     <Grid item sm={12} md={12} lg={12}>
                         <TextField

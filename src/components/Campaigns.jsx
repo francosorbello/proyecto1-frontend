@@ -28,40 +28,7 @@ const modalBoxStyle = {
     p: 4,
 };
 
-/** Campos de las columnas */
-const columns = [
-    //el field de las columnas tiene que matchear con los nombres de los valores del server
-    //ej: en el server, la fecha de fin se almacena en "endDate". 
-    //El field de la columna que tenga las fechas de fin tambien debe ser "endDate"
-    {field: "name",headerName: "Nombre", width: 300},
-    {field: "description",headerName: "Descripcion", width: 130},
-    {field: "initialDate",headerName: "Fecha Inicio", width: 130},
-    {field: "endDate",headerName: "Fecha Fin", width: 130},
-    {
-        field: "edit", 
-        headerName: "Editar",
-        width:80,
-        renderCell: (cellValues) => {
-            return(
-                <IconButton aria-label="Editar">
-                    <Edit></Edit>
-                </IconButton>
-            )
-        }
-    },
-    {
-        field: "delete", 
-        headerName: "Borrar",
-        width:80,
-        renderCell: (cellValues) => {
-            return(
-                <IconButton aria-label="Editar">
-                    <Delete></Delete>
-                </IconButton>
-            )
-        }
-    }
-]
+
 
 /** 
  * Muestra una tabla con las campañas activas.
@@ -69,11 +36,74 @@ const columns = [
  * Permite editar,borrar y crear nuevas campañas.
 */
 const Campaigns = () => {
-    const {campaigns} = useContext(CampaignContext);
+    const {campaigns, setCampaigns} = useContext(CampaignContext);
     
     const [open,setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+    const [editCampaign,setEditCampaign] = useState(null);
+
+    /**
+     * Responde al click del boton de editar en una fila
+     * @e Evento generado al clickear
+     * @cellVal Valores de la columna y de la fila
+     */
+    const handleEdit = (e,cellVal) => {
+        e.stopPropagation();
+        setEditCampaign(cellVal.row)
+        setOpen(true)
+    }
+
+    const handleDelete = async (e,cellVal) => {
+        e.stopPropagation();
+        const id = cellVal.row.id;
+        const res = await fetch(`http://127.0.0.1:8000/api/campaign-api/${id}/`,{
+            method: "DELETE",
+            headers: {
+              'Content-type': 'application/json',
+            },
+        })
+        if(res.status == "200") {
+            setCampaigns(campaigns.filter((item) => item.id !== id))     
+        } else {
+            alert("Hubo un error al conectarse con la base de datos.")
+            console.log(await res.json())
+        }
+    }
+    /** Campos de las columnas */
+    const columns = [
+        //el field de las columnas tiene que matchear con los nombres de los valores del server
+        //ej: en el server, la fecha de fin se almacena en "endDate". 
+        //El field de la columna que tenga las fechas de fin tambien debe ser "endDate"
+        {field: "name",headerName: "Nombre", width: 300},
+        {field: "description",headerName: "Descripcion", width: 130},
+        {field: "initialDate",headerName: "Fecha Inicio", width: 130},
+        {field: "endDate",headerName: "Fecha Fin", width: 130},
+        {
+            field: "edit", 
+            headerName: "Editar",
+            width:80,
+            renderCell: (cellValues) => {
+                return(
+                    <IconButton aria-label="Editar" onClick={(e)=>handleEdit(e,cellValues)}>
+                        <Edit></Edit>
+                    </IconButton>
+                )
+            }
+        },
+        {
+            field: "delete", 
+            headerName: "Borrar",
+            width:80,
+            renderCell: (cellValues) => {
+                return(
+                    <IconButton aria-label="Borrar" onClick={(e)=>handleDelete(e,cellValues)}>
+                        <Delete></Delete>
+                    </IconButton>
+                )
+            }
+        }
+    ]
 
     return (
         <div>
@@ -97,7 +127,7 @@ const Campaigns = () => {
                     <Typography sx={{paddingBottom: 4}} id="modal-wind-title" variant="h6" component="h2">
                             Añadir / Editar campaña
                     </Typography>
-                    <CampaignForm></CampaignForm>
+                    <CampaignForm campaign={editCampaign} onSubmit={()=>setOpen(false)}></CampaignForm>
                 </Box>
             </Modal>
             <Fab color="primary" aria-label="add" style={style} onClick={()=>setOpen(true)}>
