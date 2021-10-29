@@ -4,7 +4,7 @@ import { Box } from '@mui/system';
 // import DateAdapter from '@mui/';
 // import LocalizationProvider from '@mui/lab/LocalizationProvider';
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ReactDatePicker from 'react-datepicker';
 // import required react-datepicker styling file
 import "react-datepicker/dist/react-datepicker.css";
@@ -31,66 +31,62 @@ const style = {
     p: 4,
   };
 
-const CampaignForm = () => {
-    const [open,setOpen] = useState(true);
-    
+const CampaignForm = ({campaign}) => {
     const [campaignName, setCampaignName] = useState("");
+    const [description,setDescription] = useState("");
     const [initialDate, setInitialDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
     
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
-    
+    useEffect(() => {
+        if(campaign != null){
+            setCampaignName(campaign.name)
+            setDescription(campaign.description)
+            setInitialDate(campaign.initialDate)
+            setEndDate(campaign.endDate)
+        }
+    }, [])
+
     return (
         <div>
-            <Modal
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="modal-wind-title"
-            >
-                <Box sx={style}>
-                    <Typography sx={{paddingBottom: 4}} id="modal-wind-title" variant="h6" component="h2">
-                        Añadir / Editar campaña
-                    </Typography>
-                    <form autoComplete="off" >
-                        <Grid container spacing={3}>
-                            <Grid item sm={12} md={12} lg={12}>
-                                <TextField
-                                    label="Nombre"
-                                    fullWidth={true}
-                                    onChange={(e)=>setCampaignName(e.target.value)}
-                                >
-                                </TextField>
-                            </Grid>
-                            <Grid item sm={12} md={12} lg={12}>
-                                <TextField
-                                    label="Descripción"
-                                    multiline
-                                    minRows={5}
-                                    fullWidth={true}
-                                    onChange={(e)=>setCampaignName(e.target.value)}
-                                >
-                                </TextField>
-                            </Grid>
-                            <Grid item sm={6} md={6} lg={6}>
-                                <div>
-                                    <InputLabel id="intialDate-name-label">Fecha de inicio</InputLabel>
-                                    <ReactDatePicker selected={initialDate} onChange={(date)=>setInitialDate(date)} />
-                                </div>
-                            </Grid>
-                            <Grid item sm={6} md={6} lg={6}>
-                                <div>
-                                    <InputLabel id="intialDate-name-label">Fecha de fin</InputLabel>
-                                    <ReactDatePicker selected={endDate} onChange={(date)=>setEndDate(date)} />
-                                </div>
-                            </Grid>
-                        </Grid>
-                        <Fab color="primary" aria-label="add" style={fabStyle} type="submit">
-                            <Done></Done>
-                        </Fab>                    
-                    </form>
-                </Box>
-            </Modal>
+            <form autoComplete="off" >
+                <Grid container spacing={3}>
+                    <Grid item sm={12} md={12} lg={12}>
+                        <TextField
+                            label="Nombre"
+                            fullWidth={true}
+                            onChange={(e)=>setCampaignName(e.target.value)}
+                            value={campaignName}
+                        >
+                        </TextField>
+                    </Grid>
+                    <Grid item sm={12} md={12} lg={12}>
+                        <TextField
+                            label="Descripción"
+                            multiline
+                            minRows={5}
+                            fullWidth={true}
+                            onChange={(e)=>setDescription(e.target.value)}
+                            value={description}
+                        >
+                        </TextField>
+                    </Grid>
+                    <Grid item sm={6} md={6} lg={6}>
+                        <div>
+                            <InputLabel id="intialDate-name-label">Fecha de inicio</InputLabel>
+                            <ReactDatePicker selected={initialDate} onChange={(date)=>setInitialDate(date)} />
+                        </div>
+                    </Grid>
+                    <Grid item sm={6} md={6} lg={6}>
+                        <div>
+                            <InputLabel id="intialDate-name-label">Fecha de fin</InputLabel>
+                            <ReactDatePicker selected={endDate} onChange={(date)=>setEndDate(date)} />
+                        </div>
+                    </Grid>
+                </Grid>
+                <Fab color="primary" aria-label="add" style={fabStyle} type="submit">
+                    <Done></Done>
+                </Fab>                    
+            </form>
         </div>
     )
 }

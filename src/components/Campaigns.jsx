@@ -1,8 +1,10 @@
 import { Add, Delete, Edit, Title } from '@mui/icons-material'
-import {IconButton, Fab } from '@mui/material'
-import React, { useContext } from 'react'
+import {IconButton, Fab, Modal, Typography } from '@mui/material'
+import React, { useContext, useState } from 'react'
 import { CampaignContext } from '../contexts/CampaignContext'
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { Box } from '@mui/system';
+import CampaignForm from './CampaignForm';
 
 /** Estilo para que el FAB se vea abajo a la derecha */
 const style = {
@@ -12,6 +14,18 @@ const style = {
     bottom: 20,
     left: 'auto',
     position: 'fixed',
+};
+
+const modalBoxStyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 600,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
 };
 
 /** Campos de las columnas */
@@ -56,6 +70,11 @@ const columns = [
 */
 const Campaigns = () => {
     const {campaigns} = useContext(CampaignContext);
+    
+    const [open,setOpen] = useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
     return (
         <div>
             <DataGrid
@@ -69,7 +88,19 @@ const Campaigns = () => {
                   }}
             >
             </DataGrid>
-            <Fab color="primary" aria-label="add" style={style}>
+            <Modal 
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-wind-title"
+            >
+                <Box sx={modalBoxStyle}>
+                    <Typography sx={{paddingBottom: 4}} id="modal-wind-title" variant="h6" component="h2">
+                            Añadir / Editar campaña
+                    </Typography>
+                    <CampaignForm></CampaignForm>
+                </Box>
+            </Modal>
+            <Fab color="primary" aria-label="add" style={style} onClick={()=>setOpen(true)}>
                 <Add />
             </Fab>
         </div>
