@@ -1,8 +1,7 @@
 import { Done } from '@mui/icons-material';
 import { Fab, FormControl, Grid, InputLabel, Modal, Select, TextField, Typography } from '@mui/material'
 import { Box } from '@mui/system';
-// import DateAdapter from '@mui/';
-// import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import update from 'immutability-helper';
 
 import React, { useContext, useEffect, useState } from 'react'
 import ReactDatePicker from 'react-datepicker';
@@ -52,39 +51,77 @@ const CampaignForm = ({campaign, onSubmit}) => {
         return year + "-" + month + "-" + day
     }
 
+    /**
+     * Añade una campaña a la base de datos y actualiza
+     * el context global
+     */
+    const createCampaign = async () => {
+        //TODO: verificar que los campos esten completados
+        const nCampaign = {
+            "name": campaignName,
+            "description": description,
+            "initialDate": formatDate(initialDate),
+            "endDate": formatDate(endDate)
+        }
+        const res = await fetch("http://127.0.0.1:8000/api/campaign-api/",{
+            method: "POST",
+            headers: {
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify(nCampaign)
+        })
+        if(res.status == "200") {
+            const resJ = await res.json();
+            const campaignFormat = {
+                "id": resJ["id"],
+                "name": nCampaign.name,
+                "description": nCampaign.description,
+                "initialDate": nCampaign.initalDate,
+                "endDate": nCampaign.endDate,
+            }
+            //actualizo el context global
+            onSubmit(campaignFormat)
+            setCampaigns([...campaigns,campaignFormat])
+
+        } else {
+            alert("Hubo un problema al conectarse con la base de datos.")
+        }
+    }
+
+    const editCampaign = async() => {
+        console.log(campaign.id)
+        const nCampaign = {
+            "name": campaignName,
+            "description": description,
+            "initialDate": formatDate(initialDate),
+            "endDate": formatDate(endDate)
+        }
+        const res = await fetch(`http://127.0.0.1:8000/api/campaign-api/${campaign.id}/`,{
+            method: "PATCH",
+            headers: {
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify(nCampaign)
+        })
+        if(res.status=="200") {
+            const indx = campaigns.findIndex((elem)=>elem.id == campaign.id);
+            nCampaign["id"] = campaign.id;
+            const updatedCampaigns = update(campaigns,{$splice: [[indx,1,nCampaign]]})
+            setCampaigns(updatedCampaigns)
+            onSubmit(nCampaign)
+        } else {
+            alert("Error en la base de datos")
+            console.log(await res.json())
+        }
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         if(campaign == null) {
-            //TODO: verificar que los campos esten completados
-            const nCampaign = {
-                "name": campaignName,
-                "description": description,
-                "initialDate": formatDate(initialDate),
-                "endDate": formatDate(endDate)
-            }
-            const res = await fetch("http://127.0.0.1:8000/api/campaign-api/",{
-                method: "POST",
-                headers: {
-                    'Content-type': 'application/json',
-                },
-                body: JSON.stringify(nCampaign)
-            })
-            if(res.status == "200") {
-                const resJ = await res.json();
-                const campaignFormat = {
-                    "id": resJ["id"],
-                    "name": nCampaign.name,
-                    "description": nCampaign.description,
-                    "initialDate": nCampaign.initalDate,
-                    "endDate": nCampaign.endDate,
-                }
-                //actualizo el context global
-                onSubmit(campaignFormat)
-                setCampaigns([...campaigns,campaignFormat])
-
-            } else {
-                alert("Hubo un problema al conectarse con la base de datos.")
-            }
+            createCampaign();
+        }
+        else {
+            editCampaign();
         }
     }
     
