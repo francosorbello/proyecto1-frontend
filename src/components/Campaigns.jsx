@@ -56,6 +56,9 @@ const Campaigns = () => {
 
     const handleDelete = async (e,cellVal) => {
         e.stopPropagation();
+        if(!window.confirm("Deseas borrar la campaña?")) {
+            return;
+        }
         const id = cellVal.row.id;
         const res = await fetch(`http://127.0.0.1:8000/api/campaign-api/${id}/`,{
             method: "DELETE",
@@ -63,6 +66,7 @@ const Campaigns = () => {
               'Content-type': 'application/json',
             },
         })
+        
         if(res.status == "200") {
             setCampaigns(campaigns.filter((item) => item.id !== id))     
         } else {
