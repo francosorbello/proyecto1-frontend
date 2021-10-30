@@ -16,10 +16,11 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { Campaign as CampaignIcon, Dashboard as DashboardIcon, MarkunreadMailbox, Tag as TagIcon} from '@mui/icons-material';
 import NavBarItem from './NavBarItem';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import Campaigns from "../components/Campaigns"
+import Campaigns from "./campaigns/Campaigns"
 import CampaignContextProvider from '../contexts/CampaignContext';
 import DashboardContent from './DashboardContent';
-import CampaignForm from './CampaignForm';
+import CampaignForm from './campaigns/CampaignForm';
+import TagView from './TagView';
 
 
 const drawerWidth = 240;
@@ -154,7 +155,11 @@ export default function Dashboard() {
                   </DashboardContent>
                 </Route>
                 <Route path="/dashboard/donaciones" exact={true} component={Test}></Route>
-                <Route path="/dashboard/tags" exact={true} component={CampaignForm}></Route>
+                <Route path="/dashboard/tags" exact={true} >
+                  <DashboardContent title="Tags">
+                    <TagView></TagView>
+                  </DashboardContent>
+                </Route>
           </Container>
         </Box>
       </Box>

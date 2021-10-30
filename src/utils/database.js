@@ -2,6 +2,7 @@ const userAPI = "user-api"
 const donationAPI = "donation-api"
 const donatorAPI = "donator-api"
 const campaignAPI = "campaign-api"
+const tagAPI = "tag-api"
 
 async function fetchFromServer(apiName){
     const res = await fetch(`http://127.0.0.1:8000/api/${apiName}/`)
@@ -53,4 +54,13 @@ export async function fetchDonations(){
 
 export async function fetchDonation(id){
     return fetchById(donationAPI,id)
+}
+
+//tags
+export async function fetchTags() {
+    return fetchFromServer(tagAPI)
+}
+
+export async function fetchTag(id) {
+    return fetchById(tagAPI,id)
 }

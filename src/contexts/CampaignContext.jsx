@@ -1,5 +1,5 @@
 import React, { createContext, useState,useEffect } from 'react'
-import { fetchCampaigns, fetchDonations } from '../utils/database';
+import { fetchCampaigns } from '../utils/database';
 
 /**
  * Context que contiene las campañas

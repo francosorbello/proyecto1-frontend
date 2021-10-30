@@ -7,7 +7,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import ReactDatePicker from 'react-datepicker';
 // import required react-datepicker styling file
 import "react-datepicker/dist/react-datepicker.css";
-import { CampaignContext } from '../contexts/CampaignContext';
+import { CampaignContext } from '../../contexts/CampaignContext';
 
 const fabStyle = {
     margin: 0,
@@ -57,6 +57,7 @@ const CampaignForm = ({campaign, onSubmit}) => {
      */
     const createCampaign = async () => {
         //TODO: verificar que los campos esten completados
+        console.log("creating campaign")
         const nCampaign = {
             "name": campaignName,
             "description": description,
@@ -89,6 +90,7 @@ const CampaignForm = ({campaign, onSubmit}) => {
     }
 
     const editCampaign = async() => {
+        console.log("editing campaign")
         console.log(campaign.id)
         const nCampaign = {
             "name": campaignName,
@@ -112,6 +114,7 @@ const CampaignForm = ({campaign, onSubmit}) => {
         } else {
             alert("Error en la base de datos")
             console.log(await res.json())
+            // onSubmit(null)
         }
     }
 

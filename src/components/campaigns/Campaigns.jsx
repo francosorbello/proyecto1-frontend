@@ -1,7 +1,7 @@
 import { Add, Delete, Edit, Title } from '@mui/icons-material'
 import {IconButton, Fab, Modal, Typography } from '@mui/material'
 import React, { useContext, useState } from 'react'
-import { CampaignContext } from '../contexts/CampaignContext'
+import { CampaignContext } from '../../contexts/CampaignContext'
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { Box } from '@mui/system';
 import CampaignForm from './CampaignForm';
@@ -40,7 +40,10 @@ const Campaigns = () => {
     
     const [open,setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const handleClose = () => {
+        setOpen(false);
+        setEditCampaign(null);
+    }
     const [editCampaign,setEditCampaign] = useState(null);
 
     /**
@@ -131,7 +134,7 @@ const Campaigns = () => {
                     <Typography sx={{paddingBottom: 4}} id="modal-wind-title" variant="h6" component="h2">
                             Añadir / Editar campaña
                     </Typography>
-                    <CampaignForm campaign={editCampaign} onSubmit={()=>setOpen(false)}></CampaignForm>
+                    <CampaignForm campaign={editCampaign} onSubmit={handleClose}></CampaignForm>
                 </Box>
             </Modal>
             <Fab color="primary" aria-label="add" style={style} onClick={()=>setOpen(true)}>
