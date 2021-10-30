@@ -1,15 +1,18 @@
 import React from 'react'
 import Chip from '@mui/material/Chip';
 import Stack  from '@mui/material/Stack';
+import { Container } from '@mui/material';
 
 const TagList = ({ tags,onDelete }) => {
     return (
         <div>
-            <Stack direction="row" spacing={1}>
-            {tags.map(
-                (tag) => <Chip label={tag.name} onDelete={() => onDelete(tag)}></Chip>
-            )}
-            </Stack>
+            <Container>
+                <Stack direction="row" spacing={1}>
+                {tags.map(
+                    (tag) => <Chip key={tag.id} label={tag.name} onDelete={() => onDelete(tag)}></Chip>
+                )}
+                </Stack>
+            </Container>
         </div>
     )
 }
