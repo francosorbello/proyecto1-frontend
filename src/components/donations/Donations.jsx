@@ -92,17 +92,26 @@ const Donations = () => {
             headerName: "Estado",
             width: 130,
             valueGetter: (params) => {
+                //obtengo el id del status
                 const statusId = params.row.status
+                //obtengo el objeto status con ese id de los extraidos de la base de datos
                 const fullStatus = donationStatus.filter((item)=>item[0] == statusId)
+                //retorno el nombre de ese status
                 return fullStatus.length > 0 ? fullStatus[0][1] : statusId;
             },
             sortComparator: (v1,v2) => v1.toString().localeCompare(v2.toString()),
         },
         {
-            field: "campaign",
+            field: "campaignName",
             headerName: "Campaña", 
-            width: 130,
-            // renderCell: (cellValues)
+            width: 230,
+            valueGetter: (params) => {
+                const campaignId = params.row.campaignId_id
+                const fullCampaign = campaigns.filter((item)=>item.id == campaignId)
+                // console.log(fullCampaign[0].name)
+                return fullCampaign.length > 0 ? fullCampaign[0].name : campaignId;
+            },
+            sortComparator: (v1,v2) => v1.toString().localeCompare(v2.toString()),
         },
         {
             field: "edit", 
