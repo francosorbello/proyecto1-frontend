@@ -6,6 +6,7 @@ import { Box } from '@mui/system';
 
 import { DonationContext } from '../../contexts/DonationContext';
 import { CampaignContext } from '../../contexts/CampaignContext';
+import DonationForm from './DonationForm';
 
 /** Estilo para que el FAB se vea abajo a la derecha */
 const style = {
@@ -141,20 +142,26 @@ const Donations = () => {
 
     return (
         <div>
-            <DataGrid
-                autoHeight
-                rows={donations}
-                columns={columns}
-                pageSize={5}
-                rowsPerPageOptions={[5]}
-                components={{
-                    Toolbar: GridToolbar,
-                  }}
-            >
-            </DataGrid>
-            <Fab color="primary" aria-label="add" style={style} onClick={()=>setOpen(true)}>
-                <Add />
-            </Fab>
+            {!setOpen ? 
+            <div>
+                <DataGrid
+                    autoHeight
+                    rows={donations}
+                    columns={columns}
+                    pageSize={5}
+                    rowsPerPageOptions={[5]}
+                    components={{
+                        Toolbar: GridToolbar,
+                    }}
+                >
+                </DataGrid>
+                <Fab color="primary" aria-label="add" style={style} onClick={()=>setOpen(true)}>
+                    <Add />
+                </Fab>
+            </div>
+            :
+                <DonationForm></DonationForm>
+            }
         </div>
     )
 }
