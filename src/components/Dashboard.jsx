@@ -22,6 +22,8 @@ import DashboardContent from './DashboardContent';
 import CampaignForm from './campaigns/CampaignForm';
 import TagView from './tags/TagView';
 import TagContextProvider from '../contexts/TagContext';
+import DonationContextProvider from '../contexts/DonationContext';
+import Donations from './donations/Donations';
 
 
 const drawerWidth = 240;
@@ -155,7 +157,15 @@ export default function Dashboard() {
                     </CampaignContextProvider>
                   </DashboardContent>
                 </Route>
-                <Route path="/dashboard/donaciones" exact={true} component={Test}></Route>
+                <Route path="/dashboard/donaciones" exact={true}>
+                  <DashboardContent title ="Donaciones">
+                    <CampaignContextProvider>
+                      <DonationContextProvider>
+                        <Donations></Donations>
+                      </DonationContextProvider>
+                    </CampaignContextProvider>
+                  </DashboardContent>
+                </Route>
                 <Route path="/dashboard/tags" exact={true} >
                   <DashboardContent title="Tags">
                     <TagContextProvider>
