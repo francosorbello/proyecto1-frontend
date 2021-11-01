@@ -2,6 +2,7 @@ import { Autocomplete, FormControl, Grid, InputLabel, MenuItem, Select, TextFiel
 import React, { useContext, useState } from 'react'
 import { CampaignContext } from '../../contexts/CampaignContext'
 import { DonationContext } from '../../contexts/DonationContext'
+import DonatedElementForm from './DonatedElementForm'
 
 const DonationForm = () => {
     const {donations,setDonations,donationStatus} = useContext(DonationContext)
@@ -50,6 +51,9 @@ const DonationForm = () => {
                                 }
                             </Select>
                         </FormControl>
+                    </Grid>
+                    <Grid item md={12}>
+                    <DonatedElementForm></DonatedElementForm>
                     </Grid>
                 </Grid>
             </form>        

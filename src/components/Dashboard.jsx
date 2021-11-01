@@ -24,6 +24,7 @@ import TagView from './tags/TagView';
 import TagContextProvider from '../contexts/TagContext';
 import DonationContextProvider from '../contexts/DonationContext';
 import Donations from './donations/Donations';
+import AppContextProvider from '../contexts/AppContext';
 
 
 const drawerWidth = 240;
@@ -159,11 +160,9 @@ export default function Dashboard() {
                 </Route>
                 <Route path="/dashboard/donaciones" exact={true}>
                   <DashboardContent title ="Donaciones">
-                    <CampaignContextProvider>
-                      <DonationContextProvider>
-                        <Donations></Donations>
-                      </DonationContextProvider>
-                    </CampaignContextProvider>
+                    <AppContextProvider>
+                      <Donations></Donations>
+                    </AppContextProvider>
                   </DashboardContent>
                 </Route>
                 <Route path="/dashboard/tags" exact={true} >
