@@ -23,11 +23,12 @@ const NumericInput = ({label,minValue = 0,value = 0, onChange}) => {
     }, [])
     return (
         <div>
-            <Stack direction="vertical">
+            <Stack direction="row">
                 <IconButton onClick={()=>handleChange(localValue-1)}>
                     <Remove/>
                 </IconButton>
                 <TextField 
+                    type="numeric"
                     label={label}
                     value={localValue}
                     onChange={(e)=>handleChange(e.target.value)}
