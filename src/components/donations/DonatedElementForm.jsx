@@ -1,4 +1,5 @@
-import { Autocomplete, Grid, TextField } from '@mui/material'
+import { Delete, Save } from '@mui/icons-material'
+import { Autocomplete, Grid, IconButton, Stack, TextField } from '@mui/material'
 import React, { useContext, useState } from 'react'
 import { TagContext } from '../../contexts/TagContext'
 import NumericInput from './NumericInput'
@@ -29,12 +30,20 @@ const DonatedElementForm = () => {
                             onChange={(e,params)=>console.log(params)}
                         />
                     </Grid>
-                    <Grid item sm={2} md={2} lg={2}>
-                        <NumericInput 
-                            label="Cantidad"
-                            minValue={0}
-                            onChange={(e)=>console.log(e)}
-                        />
+                    <Grid item sm={4} md={4} lg={4}>
+                        <Stack direction="vertical">
+                            <NumericInput 
+                                label="Cantidad"
+                                minValue={0}
+                                onChange={(e)=>console.log(e)}
+                            />
+                            <IconButton>
+                                <Save />
+                            </IconButton>
+                            <IconButton>
+                                <Delete />
+                            </IconButton>
+                        </Stack>
                     </Grid>
                 </Grid>
             {/* </form> */}
