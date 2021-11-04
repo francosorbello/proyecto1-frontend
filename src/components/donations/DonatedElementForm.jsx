@@ -4,19 +4,32 @@ import React, { useContext, useEffect, useState } from 'react'
 import { TagContext } from '../../contexts/TagContext'
 import NumericInput from './NumericInput'
 
-const DonatedElementForm = ({data}) => {
+/**
+ * Formulario para añadir/editar un elemento donado
+ */
+const DonatedElementForm = ({data,onSave,onDelete}) => {
     const [description, setDescription] = useState("")
     const [elementTags, setElementTags] = useState([])
     const [quantity,setQuantity] = useState(0)
 
     const {tags} = useContext(TagContext)
-    // useEffect(() => {
-    //     if(data !== null) {
-    //         setDescription(data.description)
-    //         setQuantity(data.count)
-            
-    //     }
-    // }, [])
+    useEffect(() => {
+        if(data !== null) {
+            setDescription(data.description)
+            setQuantity(data.count)
+            setElementTags(data.tags)
+        }
+    }, [])
+
+    const handleSave = (e) => {
+        const nElement = {
+            "description":description,
+            "tags": elementTags,
+            "quantity":quantity
+        }
+        onSave(nElement)
+    }
+
     return (
         <div>
             {/* <form autoComplete="off"> */}
@@ -41,16 +54,16 @@ const DonatedElementForm = ({data}) => {
                         />
                     </Grid>
                     <Grid item sm={4} md={4} lg={4}>
-                        <Stack direction="row" spacing={3}>
+                        <Stack direction="row" >
                             <NumericInput
                                 label="Cantidad"
                                 minValue={0}
                                 onChange={(e)=>setQuantity(e)}
                             />
-                            <IconButton>
+                            <IconButton onClick={handleSave}>
                                 <Save />
                             </IconButton>
-                            <IconButton>
+                            <IconButton onClick={onDelete}>
                                 <Delete />
                             </IconButton>
                         </Stack>

@@ -1,15 +1,37 @@
-import { Autocomplete, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material'
+import { Autocomplete, Divider, FormControl, Grid, IconButton, InputLabel, List, MenuItem, Select, Stack, TextField, Typography } from '@mui/material'
 import React, { useContext, useState } from 'react'
 import { CampaignContext } from '../../contexts/CampaignContext'
 import { DonationContext } from '../../contexts/DonationContext'
 import DonatedElementForm from './DonatedElementForm'
+import { Add } from '@mui/icons-material'
 
+/**
+ * Formulario para añadir/editar una donacion
+ */
 const DonationForm = () => {
     const {donations,setDonations,donationStatus} = useContext(DonationContext)
     const {campaigns} = useContext(CampaignContext)
     const [address,setAddress] = useState("")
     const [status, setStatus] = useState("")
+    const [donationElements,setDonationElements] = useState([])
     
+    const addDonationElement = () => {
+        const nElement = {
+            "description":"",
+            "tags":[],
+            "count": 0
+        }
+        setDonationElements([...donationElements,nElement])
+    }
+
+    const handleSave = (elem) => {
+        console.log(elem)
+    }
+
+    const handleDelete = (id) => {
+        setDonationElements(donationElements.filter((elem,index)=>index !== id))
+    }
+
     return (
         <div>
             <form autoComplete="off">
@@ -52,10 +74,18 @@ const DonationForm = () => {
                             </Select>
                         </FormControl>
                     </Grid>
-                    <Grid item md={12}>
-                    <DonatedElementForm></DonatedElementForm>
-                    </Grid>
                 </Grid>
+                {/* Seccion de elementos donados */}
+                <Divider sx={{padding: 1}}/>
+                <Typography sx={{color:"#1976D2", fontSize: 20, paddingTop: 1}}>Elementos donados</Typography>
+                <Stack spacing = {3}>
+                    {
+                        donationElements.map((elem,index)=><DonatedElementForm data={elem} onSave={handleSave} onDelete={()=>handleDelete(index)} />)
+                    }
+                    <IconButton onClick={()=>addDonationElement()}>
+                        <Add />
+                    </IconButton>
+                </Stack>
             </form>        
         </div>
     )
