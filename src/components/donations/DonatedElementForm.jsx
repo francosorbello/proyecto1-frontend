@@ -7,12 +7,17 @@ import NumericInput from './NumericInput'
 /**
  * Formulario para añadir/editar un elemento donado
  */
-const DonatedElementForm = ({data,onSave,onDelete}) => {
+const DonatedElementForm = ({data,onSave,onDelete,autoSave = false}) => {
     const [description, setDescription] = useState("")
     const [elementTags, setElementTags] = useState([])
     const [quantity,setQuantity] = useState(0)
+    const [quantError, setQuantError] = useState(false)
 
     const {tags} = useContext(TagContext)
+    
+    /**
+     * Carga un elemento donado de entrada, si este existe.
+     */
     useEffect(() => {
         if(data !== null) {
             setDescription(data.description)
@@ -21,11 +26,57 @@ const DonatedElementForm = ({data,onSave,onDelete}) => {
         }
     }, [])
 
+    /**
+     * Actualiza el state de la cantidad de un elemento donado
+     * @param {*} quant la nueva cantidad
+     */
+    const handleQuantity = (quant) => {
+        setQuantError(quant < 1)
+        setQuantity(quant)
+        
+        if(autoSave) {
+            handleSave(null)
+        }
+    }
+
+    /**
+     * Actualiza el state de la descripcion
+     * @param {*} desc la nueva descripcion
+     */
+    const handleDescription = (desc) => {
+        setDescription(desc)
+
+        if(autoSave) {
+            handleSave(null)
+        }
+    }
+
+    const handleTags = (tags) => {
+        setElementTags(tags)
+
+        if(autoSave) {
+            handleSave(null)
+        }
+
+    }
+
+    const clearForm = () => {
+        setDescription("")
+        setElementTags([])
+        setQuantity(0)
+    }
+    /**
+     * Añade o actualiza los datos un elemento donado
+     */
     const handleSave = (e) => {
+        if(quantity < 1) {
+            setQuantError(true)
+            return
+        }
         const nElement = {
             "description":description,
             "tags": elementTags,
-            "quantity":quantity
+            "count":quantity,
         }
         onSave(nElement)
     }
@@ -39,7 +90,7 @@ const DonatedElementForm = ({data,onSave,onDelete}) => {
                             label="Descripción"
                             value={description}
                             fullWidth
-                            onChange={(e)=>setDescription(e.target.value)}
+                            onChange={(e)=>handleDescription(e.target.value)}
                         />
                     </Grid>
                     <Grid item sm={4} md={4} lg={4}>
@@ -50,7 +101,7 @@ const DonatedElementForm = ({data,onSave,onDelete}) => {
                             options={tags}
                             getOptionLabel={(option)=>option.name}
                             renderInput={(params)=>(<TextField {...params} label="Tags"/>)}
-                            onChange={(e,params)=>setElementTags(params)}
+                            onChange={(e,params)=>handleTags(params)}
                         />
                     </Grid>
                     <Grid item sm={4} md={4} lg={4}>
@@ -58,7 +109,8 @@ const DonatedElementForm = ({data,onSave,onDelete}) => {
                             <NumericInput
                                 label="Cantidad"
                                 minValue={0}
-                                onChange={(e)=>setQuantity(e)}
+                                onChange={(e)=>handleQuantity(e)}
+                                error={quantError}
                             />
                             <IconButton onClick={handleSave}>
                                 <Save />

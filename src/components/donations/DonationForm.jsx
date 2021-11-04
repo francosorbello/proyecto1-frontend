@@ -1,9 +1,19 @@
-import { Autocomplete, Divider, FormControl, Grid, IconButton, InputLabel, List, MenuItem, Select, Stack, TextField, Typography } from '@mui/material'
+import { Autocomplete, Divider, Fab, FormControl, Grid, IconButton, InputLabel, List, MenuItem, Select, Stack, TextField, Typography } from '@mui/material'
 import React, { useContext, useState } from 'react'
 import { CampaignContext } from '../../contexts/CampaignContext'
 import { DonationContext } from '../../contexts/DonationContext'
 import DonatedElementForm from './DonatedElementForm'
-import { Add } from '@mui/icons-material'
+import { Add, Done } from '@mui/icons-material'
+import update from 'immutability-helper';
+
+const fabStyle = {
+    margin: 0,
+    top: 'auto',
+    right: 20,
+    bottom: 20,
+    left: 'auto',
+    position: 'fixed',
+};
 
 /**
  * Formulario para añadir/editar una donacion
@@ -14,27 +24,71 @@ const DonationForm = () => {
     const [address,setAddress] = useState("")
     const [status, setStatus] = useState("")
     const [donationElements,setDonationElements] = useState([])
+    const [campaign,setCampaign] = useState()
     
+    /**
+     * crea un elemento donado para añadir / editar
+     */
     const addDonationElement = () => {
         const nElement = {
             "description":"",
             "tags":[],
-            "count": 0
+            "count": 0,
         }
         setDonationElements([...donationElements,nElement])
     }
 
-    const handleSave = (elem) => {
-        console.log(elem)
+    /**
+     * Recibe los datos de un nuevo elemento donado (o de uno editado) y los añade al state
+     * @param {*} elem el nuevo elemento donado
+     */
+    const handleSave = (elem,index) => {
+        const updatedDonatedElements = update(donationElements,{$splice: [[index,1,elem]]})
+        setDonationElements(updatedDonatedElements)
     }
 
+    /**
+     * Borra un elemento donado del state
+     * @param {*} id index del elemento a borrar
+     */
     const handleDelete = (id) => {
         setDonationElements(donationElements.filter((elem,index)=>index !== id))
     }
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        //POST DE LA DONACION
+        const nDonation = {
+            "storageAddress":address,
+            "campaignId": campaign.id,
+            "status": status
+        }
+        const res = await fetch("http://127.0.0.1:8000/api/donation-api/",{
+            method: "POST",
+            headers: {
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify(nDonation)
+        })
+        const donationResp = await res.json()
+        const test = donationElements.forEach((elem) => elem["donation"] = donationResp["id"])
+        console.log("test",test)
+        //POST DE LOS ELEMENTOS DONADOS
+        console.log("donated elems",donationElements)
+        const res2 = await fetch("http://127.0.0.1:8000/api/donatedElement-api/",{
+            method: "POST",
+            headers: {
+                'Content-type': 'application/json',  
+            },
+            body: JSON.stringify(donationElements)
+        })
+        console.log(await res2.json())
+    }
+
     return (
         <div>
-            <form autoComplete="off">
+            <form autoComplete="off" onSubmit={handleSubmit}>
                 <Grid container spacing={3} sx={{marginTop: 1}}>
                     <Grid item sm={12} md={12} lg={12}>
                         <TextField
@@ -51,7 +105,7 @@ const DonationForm = () => {
                             options={campaigns}
                             getOptionLabel={(option)=>option.name}
                             renderInput={(params)=> <TextField {...params} label="Campaña" />}
-                            onChange={(e,option)=>console.log(option)}
+                            onChange={(e,option)=>setCampaign(option)}
                         >
                         </Autocomplete>
                     </Grid>
@@ -80,18 +134,24 @@ const DonationForm = () => {
                 <Typography sx={{color:"#1976D2", fontSize: 20, paddingTop: 1}}>Elementos donados</Typography>
                 <Stack spacing = {3}>
                     {
-                        donationElements.map((elem,index)=><DonatedElementForm data={elem} onSave={handleSave} onDelete={()=>handleDelete(index)} />)
+                        donationElements.map((elem,index)=><DonatedElementForm 
+                                                                data={elem} 
+                                                                onSave={(e)=>handleSave(e,index)} 
+                                                                onDelete={()=>handleDelete(index)} 
+                                                                autoSave={true}
+                                                            />)
                     }
                     <IconButton onClick={()=>addDonationElement()}>
                         <Add />
                     </IconButton>
                 </Stack>
+                <Fab color="primary" aria-label="add" style={fabStyle} type="submit">
+                    <Done></Done>
+                </Fab> 
+
             </form>        
         </div>
     )
 }
-const options = [
-  { name: 'The Godfather', id: 1 },
-  { name: 'Pulp Fiction', id: 2 },
-];
+
 export default DonationForm
