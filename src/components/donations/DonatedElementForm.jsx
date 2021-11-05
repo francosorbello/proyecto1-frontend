@@ -90,7 +90,7 @@ const DonatedElementForm = ({data,onSave,onDelete,autoSave = false}) => {
                             label="Descripción"
                             value={description}
                             fullWidth
-                            onChange={(e)=>handleDescription(e.target.value)}
+                            onChange={(e)=>{e.preventDefault();handleDescription(e.target.value);}}
                         />
                     </Grid>
                     <Grid item sm={4} md={4} lg={4}>
@@ -101,7 +101,7 @@ const DonatedElementForm = ({data,onSave,onDelete,autoSave = false}) => {
                             options={tags}
                             getOptionLabel={(option)=>option.name}
                             renderInput={(params)=>(<TextField {...params} label="Tags"/>)}
-                            onChange={(e,params)=>handleTags(params)}
+                            onChange={(e,params)=>{e.preventDefault(); handleTags(params);}}
                         />
                     </Grid>
                     <Grid item sm={4} md={4} lg={4}>

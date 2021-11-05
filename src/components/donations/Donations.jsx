@@ -34,22 +34,17 @@ const modalBoxStyle = {
 
 /** 
  * Muestra una tabla con las donaciones activas.
+ * * @param {*} data donacion a editar
 */
-const Donations = () => {
+const Donations = ({data}) => {
     const {donations, setDonations, donationStatus} = useContext(DonationContext);
     const {campaigns} = useContext(CampaignContext)
     
     const [open,setOpen] = useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => {
-        setOpen(false);
-        setEditCampaign(null);
-    }
-    const [editCampaign,setEditCampaign] = useState(null);
 
-    // useEffect(() => {
-
-    // }, [])
+    useEffect(() => {
+        
+    }, [])
 
     /**
      * Responde al click del boton de editar en una fila
@@ -58,10 +53,15 @@ const Donations = () => {
      */
     const handleEdit = (e,cellVal) => {
         e.stopPropagation();
-        setEditCampaign(cellVal.row)
         setOpen(true)
     }
 
+    /**
+     * Elimina una donacion de la base de datos y actualiza el state global
+     * @param {*} e evento generado al clickear
+     * @param {*} cellVal fila a borrar
+     * @returns 
+     */
     const handleDelete = async (e,cellVal) => {
         e.stopPropagation();
         if(!window.confirm("Deseas borrar la donacion?")) {
@@ -109,7 +109,6 @@ const Donations = () => {
             valueGetter: (params) => {
                 const campaignId = params.row.campaignId_id
                 const fullCampaign = campaigns.filter((item)=>item.id == campaignId)
-                // console.log(fullCampaign[0].name)
                 return fullCampaign.length > 0 ? fullCampaign[0].name : campaignId;
             },
             sortComparator: (v1,v2) => v1.toString().localeCompare(v2.toString()),
@@ -117,7 +116,7 @@ const Donations = () => {
         {
             field: "edit", 
             headerName: "Editar",
-            width:80,
+            width: 80,
             renderCell: (cellValues) => {
                 return(
                     <IconButton aria-label="Editar" onClick={(e)=>handleEdit(e,cellValues)}>
@@ -142,7 +141,7 @@ const Donations = () => {
 
     return (
         <div>
-            {!setOpen ? 
+            {!open ? 
             <div>
                 <DataGrid
                     autoHeight
@@ -160,7 +159,7 @@ const Donations = () => {
                 </Fab>
             </div>
             :
-                <DonationForm></DonationForm>
+                <DonationForm onSubmit={()=>setOpen(false)}></DonationForm>
             }
         </div>
     )

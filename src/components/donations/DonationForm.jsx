@@ -18,7 +18,7 @@ const fabStyle = {
 /**
  * Formulario para añadir/editar una donacion
  */
-const DonationForm = () => {
+const DonationForm = ({onSubmit}) => {
     const {donations,setDonations,donationStatus} = useContext(DonationContext)
     const {campaigns} = useContext(CampaignContext)
     const [address,setAddress] = useState("")
@@ -71,19 +71,27 @@ const DonationForm = () => {
             },
             body: JSON.stringify(nDonation)
         })
-        const donationResp = await res.json()
-        const test = donationElements.forEach((elem) => elem["donation"] = donationResp["id"])
-        console.log("test",test)
-        //POST DE LOS ELEMENTOS DONADOS
-        console.log("donated elems",donationElements)
-        const res2 = await fetch("http://127.0.0.1:8000/api/donatedElement-api/",{
-            method: "POST",
-            headers: {
-                'Content-type': 'application/json',  
-            },
-            body: JSON.stringify(donationElements)
-        })
-        console.log(await res2.json())
+        if(res.status === 200){
+            //actualizo stato global donaciones
+            const donationResp = await res.json()
+            nDonation["id"] = donationResp["id"]
+            setDonations([...donations,nDonation])
+            
+            //POST DE LOS ELEMENTOS DONADOS
+            const selectedElements = donationElements.filter((elem)=>elem.count > 0 && elem.description !== "")
+            if(selectedElements.length > 0)
+            {
+                selectedElements.forEach((elem) => elem["donation"] = donationResp["id"])
+                const res2 = await fetch("http://127.0.0.1:8000/api/donatedElement-api/",{
+                    method: "POST",
+                    headers: {
+                        'Content-type': 'application/json',  
+                    },
+                    body: JSON.stringify(selectedElements)
+                })
+            }    
+            onSubmit()
+        }
     }
 
     return (
@@ -117,7 +125,7 @@ const DonationForm = () => {
                                 labelId="status-name-label"
                                 label="Status"
                                 id="status-name-select"
-                                onChange={(e)=>setStatus(e.target.value)}
+                                onChange={(e)=>{e.preventDefault(); setStatus(e.target.value);}}
                                 value={status}
                             >
                                 {
