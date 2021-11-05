@@ -39,12 +39,8 @@ const modalBoxStyle = {
 const Donations = ({data}) => {
     const {donations, setDonations, donationStatus} = useContext(DonationContext);
     const {campaigns} = useContext(CampaignContext)
-    
+    const [editDonation, setEditDonation] = useState(null)
     const [open,setOpen] = useState(false);
-
-    useEffect(() => {
-        
-    }, [])
 
     /**
      * Responde al click del boton de editar en una fila
@@ -53,6 +49,7 @@ const Donations = ({data}) => {
      */
     const handleEdit = (e,cellVal) => {
         e.stopPropagation();
+        setEditDonation(cellVal.row)
         setOpen(true)
     }
 
@@ -159,7 +156,7 @@ const Donations = ({data}) => {
                 </Fab>
             </div>
             :
-                <DonationForm onSubmit={()=>setOpen(false)}></DonationForm>
+                <DonationForm data={editDonation} onSubmit={()=>setOpen(false)}></DonationForm>
             }
         </div>
     )

@@ -1,5 +1,5 @@
 import { Autocomplete, Divider, Fab, FormControl, Grid, IconButton, InputLabel, List, MenuItem, Select, Stack, TextField, Typography } from '@mui/material'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { CampaignContext } from '../../contexts/CampaignContext'
 import { DonationContext } from '../../contexts/DonationContext'
 import DonatedElementForm from './DonatedElementForm'
@@ -17,8 +17,11 @@ const fabStyle = {
 
 /**
  * Formulario para añadir/editar una donacion
+ * @param {*} onSubmit evento que se ejecuta cuando se completa el formulario 
+ * @param {*} data donacion a editar
+ * @returns 
  */
-const DonationForm = ({onSubmit}) => {
+const DonationForm = ({data, onSubmit}) => {
     const {donations,setDonations,donationStatus} = useContext(DonationContext)
     const {campaigns} = useContext(CampaignContext)
     const [address,setAddress] = useState("")
@@ -26,6 +29,15 @@ const DonationForm = ({onSubmit}) => {
     const [donationElements,setDonationElements] = useState([])
     const [campaign,setCampaign] = useState()
     
+    useEffect(() => {
+        if(data !== null) {
+            setAddress(data.storageAddress)
+            setStatus(data.status)
+            const camp = campaigns.find((elem)=>elem.id === data.campaignId_id)
+            setCampaign(camp)
+        }
+    }, [])
+
     /**
      * crea un elemento donado para añadir / editar
      */
@@ -71,8 +83,8 @@ const DonationForm = ({onSubmit}) => {
             },
             body: JSON.stringify(nDonation)
         })
-        if(res.status === 200){
-            //actualizo stato global donaciones
+        if(res.status === 200) {
+            //actualizo status global donaciones
             const donationResp = await res.json()
             nDonation["id"] = donationResp["id"]
             setDonations([...donations,nDonation])
@@ -85,11 +97,11 @@ const DonationForm = ({onSubmit}) => {
                 const res2 = await fetch("http://127.0.0.1:8000/api/donatedElement-api/",{
                     method: "POST",
                     headers: {
-                        'Content-type': 'application/json',  
+                        'Content-type': 'application/json',
                     },
                     body: JSON.stringify(selectedElements)
                 })
-            }    
+            }
             onSubmit()
         }
     }
@@ -114,6 +126,7 @@ const DonationForm = ({onSubmit}) => {
                             getOptionLabel={(option)=>option.name}
                             renderInput={(params)=> <TextField {...params} label="Campaña" />}
                             onChange={(e,option)=>setCampaign(option)}
+                            value={campaign || null}
                         >
                         </Autocomplete>
                     </Grid>
