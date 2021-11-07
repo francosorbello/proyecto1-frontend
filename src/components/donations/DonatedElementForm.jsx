@@ -1,6 +1,6 @@
 import { Delete, Save } from '@mui/icons-material'
 import { Autocomplete, Grid, IconButton, Stack, TextField } from '@mui/material'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { TagContext } from '../../contexts/TagContext'
 import NumericInput from './NumericInput'
 
@@ -12,6 +12,7 @@ const DonatedElementForm = ({data,onSave,onDelete,autoSave = false}) => {
     const [elementTags, setElementTags] = useState([])
     const [quantity,setQuantity] = useState(0)
     const [quantError, setQuantError] = useState(false)
+    const isFirstRender = useRef(true)
 
     const {tags} = useContext(TagContext)
     
@@ -19,12 +20,16 @@ const DonatedElementForm = ({data,onSave,onDelete,autoSave = false}) => {
      * Carga un elemento donado de entrada, si este existe.
      */
     useEffect(() => {
-        if(data !== null) {
-            setDescription(data.description)
-            setQuantity(data.count)
-            setElementTags(data.tags)
+        if(isFirstRender.current) {
+            if(data !== null) {
+                setDescription(data.description)
+                setQuantity(data.count)
+                setElementTags(data.tags)
+            }
+            isFirstRender.current = false;
         }
-    }, [])
+        handleSave()
+    }, [description,elementTags,quantity])
 
     /**
      * Actualiza el state de la cantidad de un elemento donado
@@ -33,10 +38,6 @@ const DonatedElementForm = ({data,onSave,onDelete,autoSave = false}) => {
     const handleQuantity = (quant) => {
         // setQuantError(quant < 1)
         setQuantity(quant)
-        
-        if(autoSave) {
-            handleSave()
-        }
     }
 
     /**
@@ -45,19 +46,11 @@ const DonatedElementForm = ({data,onSave,onDelete,autoSave = false}) => {
      */
     const handleDescription = (desc) => {
         setDescription(desc)
-
-        if(autoSave) {
-            handleSave()
-        }
     }
 
-    const handleTags = (tags) => {
-        setElementTags(tags)
-
-        if(autoSave) {
-            handleSave()
-        }
-
+    const handleTags = (newTags) => {
+        console.log("new tags",newTags)
+        setElementTags(newTags)
     }
 
     const clearForm = () => {
@@ -99,6 +92,7 @@ const DonatedElementForm = ({data,onSave,onDelete,autoSave = false}) => {
                             limitTags={2}
                             id="tags-donatedElement"
                             options={tags}
+                            value = {elementTags || null}
                             getOptionLabel={(option)=>option.name}
                             renderInput={(params)=>(<TextField {...params} label="Tags"/>)}
                             onChange={(e,params)=>{e.preventDefault(); handleTags(params);}}
@@ -108,10 +102,9 @@ const DonatedElementForm = ({data,onSave,onDelete,autoSave = false}) => {
                         <Stack direction="row" >
                             <NumericInput
                                 label="Cantidad"
-                                minValue={0}
+                                minValue={1}
                                 initialValue={quantity}
                                 onChange={(e)=>handleQuantity(e)}
-                                error={quantError}
                             />
                             <IconButton onClick={handleSave}>
                                 <Save />

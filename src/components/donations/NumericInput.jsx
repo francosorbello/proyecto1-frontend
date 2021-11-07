@@ -2,13 +2,16 @@ import { Add, Remove } from '@mui/icons-material'
 import { IconButton, Stack, TextField } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 
-const NumericInput = ({label,minValue = 0,initialValue = 0, onChange, error=false}) => {
+const NumericInput = ({label,minValue = 0,initialValue = 0, onChange}) => {
     const [localValue, setLocalValue] = useState(0)
+    const [error,setError] = useState(false)
     
     const handleChange = (newValue) => {
         if(isNumber(newValue)) {
             const finalValue = newValue < minValue ? minValue : newValue
             setLocalValue(finalValue)
+            // console.log(finalValue <= minValue)
+            setError(finalValue <= minValue)
             onChange(finalValue)
         }
     }
@@ -37,11 +40,10 @@ const NumericInput = ({label,minValue = 0,initialValue = 0, onChange, error=fals
     }
 
     useEffect(() => { 
-        console.log("initial value",initialValue)
         if(initialValue !== null && initialValue >= minValue) {
             setLocalValue(initialValue)
         }
-    }, [])
+    }, [initialValue])
     return (
         <div>
             <Stack direction="row">

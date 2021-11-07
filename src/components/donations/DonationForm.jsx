@@ -33,13 +33,14 @@ const DonationForm = ({data, onSubmit}) => {
     
     useEffect(() => {
         if(data !== null) {
-            console.log(data)
+            console.log("donation data",data)
+            console.log("donation elem ctx",donationElementsCtx)
             setAddress(data.storageAddress)
             setStatus(data.status)
             const camp = campaigns.find((elem)=>elem.id === data.campaignId_id)
             setCampaign(camp)
 
-            console.log(donationElementsCtx.filter((elem)=>elem.donation === data.id))
+            console.log("donation elements",donationElementsCtx.filter((elem)=>elem.donation === data.id))
             setDonationElements(donationElementsCtx.filter((elem)=>elem.donation === data.id))
         }
     }, [])
@@ -62,6 +63,7 @@ const DonationForm = ({data, onSubmit}) => {
      */
     const handleSave = (elem,index) => {
         const updatedDonatedElements = update(donationElements,{$splice: [[index,1,elem]]})
+        console.log("new donated elements",updatedDonatedElements)
         setDonationElements(updatedDonatedElements)
     }
 
@@ -163,7 +165,7 @@ const DonationForm = ({data, onSubmit}) => {
                     {
                         donationElements.map((elem,index)=><DonatedElementForm 
                                                                 data={elem} 
-                                                                onSave={()=>handleSave(index)} 
+                                                                onSave={(nElem)=>handleSave(nElem,index)} 
                                                                 onDelete={()=>handleDelete(index)} 
                                                                 autoSave={true}
                                                             />)
