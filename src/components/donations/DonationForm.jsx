@@ -22,7 +22,7 @@ const fabStyle = {
  * @param {*} data donacion a editar
  * @returns 
  */
-const DonationForm = ({data, onSubmit}) => {
+const DonationForm = ({data: donation, onSubmit}) => {
     const {donations,setDonations,donationStatus} = useContext(DonationContext)
     const {donationElements: donationElementsCtx, setDonationElements: setDonationElementsCtx} = useContext(DonationElementContext)
     const {campaigns} = useContext(CampaignContext)
@@ -32,16 +32,12 @@ const DonationForm = ({data, onSubmit}) => {
     const [campaign,setCampaign] = useState()
     
     useEffect(() => {
-        if(data !== null) {
-            console.log("donation data",data)
-            console.log("donation elem ctx",donationElementsCtx)
-            setAddress(data.storageAddress)
-            setStatus(data.status)
-            const camp = campaigns.find((elem)=>elem.id === data.campaignId_id)
+        if(donation !== null) {
+            setAddress(donation.storageAddress)
+            setStatus(donation.status)
+            const camp = campaigns.find((elem)=>elem.id === donation.campaignId_id)
             setCampaign(camp)
-
-            console.log("donation elements",donationElementsCtx.filter((elem)=>elem.donation === data.id))
-            setDonationElements(donationElementsCtx.filter((elem)=>elem.donation === data.id))
+            setDonationElements(donationElementsCtx.filter((elem)=>elem.donation === donation.id))
         }
     }, [])
 
@@ -63,7 +59,6 @@ const DonationForm = ({data, onSubmit}) => {
      */
     const handleSave = (elem,index) => {
         const updatedDonatedElements = update(donationElements,{$splice: [[index,1,elem]]})
-        console.log("new donated elements",updatedDonatedElements)
         setDonationElements(updatedDonatedElements)
     }
 
@@ -75,8 +70,32 @@ const DonationForm = ({data, onSubmit}) => {
         setDonationElements(donationElements.filter((elem,index)=>index !== id))
     }
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
+        if(donation === null) {
+            addDonation()
+        } else {
+            editDonation();
+        }
+    }
+    const editDonation = async () => {
+        //PUT DE LA DONACION
+        const nDonation = {
+            "storageAddress":address,
+            "campaignId": campaign.id,
+            "status": status
+        }
+        const res = await fetch(`http://127.0.0.1:8000/api/donation-api/${donation.id}/`,{
+            method: "PATCH",
+            headers: {
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify(nDonation)
+        })
+        onSubmit()
+    }
+
+    const addDonation = async () => {
 
         //POST DE LA DONACION
         const nDonation = {
