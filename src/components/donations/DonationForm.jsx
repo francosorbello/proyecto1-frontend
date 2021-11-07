@@ -24,7 +24,7 @@ const fabStyle = {
  */
 const DonationForm = ({data, onSubmit}) => {
     const {donations,setDonations,donationStatus} = useContext(DonationContext)
-    const {donationElements: donationElementsCtx} = useContext(DonationElementContext)
+    const {donationElements: donationElementsCtx, setDonationElements: setDonationElementsCtx} = useContext(DonationElementContext)
     const {campaigns} = useContext(CampaignContext)
     const [address,setAddress] = useState("")
     const [status, setStatus] = useState("")
@@ -109,6 +109,9 @@ const DonationForm = ({data, onSubmit}) => {
                     },
                     body: JSON.stringify(selectedElements)
                 })
+                if(res2.status === 200) {
+                    setDonationElementsCtx([...donationElements,selectedElements])
+                }
             }
             onSubmit()
         }
