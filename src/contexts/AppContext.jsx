@@ -1,6 +1,7 @@
 import React from 'react'
 import CampaignContextProvider from './CampaignContext'
 import DonationContextProvider from './DonationContext'
+import DonationElementContextProvider from './DonationElementContext'
 import TagContextProvider from './TagContext'
 
 /**
@@ -10,11 +11,13 @@ const AppContextProvider = (props) => {
     return (
         <div>
             <DonationContextProvider>
-                <CampaignContextProvider>
-                    <TagContextProvider>
-                        {props.children}
-                    </TagContextProvider>
-                </CampaignContextProvider>
+                <DonationElementContextProvider>
+                    <CampaignContextProvider>
+                        <TagContextProvider>
+                            {props.children}
+                        </TagContextProvider>
+                    </CampaignContextProvider>
+                </DonationElementContextProvider>
             </DonationContextProvider>
         </div>
     )

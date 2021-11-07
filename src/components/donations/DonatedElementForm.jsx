@@ -31,11 +31,11 @@ const DonatedElementForm = ({data,onSave,onDelete,autoSave = false}) => {
      * @param {*} quant la nueva cantidad
      */
     const handleQuantity = (quant) => {
-        setQuantError(quant < 1)
+        // setQuantError(quant < 1)
         setQuantity(quant)
         
         if(autoSave) {
-            handleSave(null)
+            handleSave()
         }
     }
 
@@ -47,7 +47,7 @@ const DonatedElementForm = ({data,onSave,onDelete,autoSave = false}) => {
         setDescription(desc)
 
         if(autoSave) {
-            handleSave(null)
+            handleSave()
         }
     }
 
@@ -55,7 +55,7 @@ const DonatedElementForm = ({data,onSave,onDelete,autoSave = false}) => {
         setElementTags(tags)
 
         if(autoSave) {
-            handleSave(null)
+            handleSave()
         }
 
     }
@@ -68,7 +68,7 @@ const DonatedElementForm = ({data,onSave,onDelete,autoSave = false}) => {
     /**
      * Añade o actualiza los datos un elemento donado
      */
-    const handleSave = (e) => {
+    const handleSave = () => {
         if(quantity < 1) {
             setQuantError(true)
             return
@@ -109,6 +109,7 @@ const DonatedElementForm = ({data,onSave,onDelete,autoSave = false}) => {
                             <NumericInput
                                 label="Cantidad"
                                 minValue={0}
+                                initialValue={quantity}
                                 onChange={(e)=>handleQuantity(e)}
                                 error={quantError}
                             />

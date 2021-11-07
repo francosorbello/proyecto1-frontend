@@ -1,4 +1,5 @@
-import React, { createContext, useState } from 'react'
+import React, { createContext, useEffect, useState } from 'react'
+import { fetchDonationElements } from '../utils/database';
 
 /**
  * Context de los elementos donados
@@ -12,6 +13,15 @@ export const DonationElementContext = createContext();
  */
 const DonationElementContextProvider = (props) => {
     const [donationElements,setDonationElements] = useState([])
+
+    useEffect(() => {
+        const getDonationElements = async() => {
+            const data = await fetchDonationElements()
+            setDonationElements(data)
+        }
+        
+        getDonationElements()
+    }, [])
     const value = {
         donationElements: donationElements,
         setDonationElements: setDonationElements

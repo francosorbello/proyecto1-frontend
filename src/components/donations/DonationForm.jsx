@@ -5,6 +5,7 @@ import { DonationContext } from '../../contexts/DonationContext'
 import DonatedElementForm from './DonatedElementForm'
 import { Add, Done } from '@mui/icons-material'
 import update from 'immutability-helper';
+import { DonationElementContext } from '../../contexts/DonationElementContext'
 
 const fabStyle = {
     margin: 0,
@@ -23,6 +24,7 @@ const fabStyle = {
  */
 const DonationForm = ({data, onSubmit}) => {
     const {donations,setDonations,donationStatus} = useContext(DonationContext)
+    const {donationElements: donationElementsCtx} = useContext(DonationElementContext)
     const {campaigns} = useContext(CampaignContext)
     const [address,setAddress] = useState("")
     const [status, setStatus] = useState("")
@@ -31,10 +33,14 @@ const DonationForm = ({data, onSubmit}) => {
     
     useEffect(() => {
         if(data !== null) {
+            console.log(data)
             setAddress(data.storageAddress)
             setStatus(data.status)
             const camp = campaigns.find((elem)=>elem.id === data.campaignId_id)
             setCampaign(camp)
+
+            console.log(donationElementsCtx.filter((elem)=>elem.donation === data.id))
+            setDonationElements(donationElementsCtx.filter((elem)=>elem.donation === data.id))
         }
     }, [])
 
@@ -157,7 +163,7 @@ const DonationForm = ({data, onSubmit}) => {
                     {
                         donationElements.map((elem,index)=><DonatedElementForm 
                                                                 data={elem} 
-                                                                onSave={(e)=>handleSave(e,index)} 
+                                                                onSave={()=>handleSave(index)} 
                                                                 onDelete={()=>handleDelete(index)} 
                                                                 autoSave={true}
                                                             />)

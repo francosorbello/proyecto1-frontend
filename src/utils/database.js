@@ -1,6 +1,7 @@
 const userAPI = "user-api"
 const donationAPI = "donation-api"
 const donatorAPI = "donator-api"
+const donatedElementAPI = "donatedElement-api"
 const campaignAPI = "campaign-api"
 const tagAPI = "tag-api"
 
@@ -63,4 +64,9 @@ export async function fetchTags() {
 
 export async function fetchTag(id) {
     return fetchById(tagAPI,id)
+}
+
+//DONATED ELEMENTS
+export async function fetchDonationElements() {
+    return fetchFromServer(donatedElementAPI)
 }

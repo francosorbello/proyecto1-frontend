@@ -4,18 +4,40 @@ import React, { useEffect, useState } from 'react'
 
 const NumericInput = ({label,minValue = 0,initialValue = 0, onChange, error=false}) => {
     const [localValue, setLocalValue] = useState(0)
+    
     const handleChange = (newValue) => {
         if(isNumber(newValue)) {
-            setLocalValue(newValue < minValue ? minValue : newValue)
-            onChange(newValue < minValue ? minValue : newValue)
+            const finalValue = newValue < minValue ? minValue : newValue
+            setLocalValue(finalValue)
+            onChange(finalValue)
         }
+    }
+
+    /**
+     * Reduce el valor en 1 y actualiza el state
+     * @param {*} value el valor a reducir
+     */
+    const reduceNumber = (value) => {
+        if(isNumber(value)) {
+            handleChange(Number(value)-1)
+        }
+    }
+
+    /**
+     * Suma 1 al valor y actualiza state
+     */
+    const addNumber = (value) => {
+            if(isNumber(value)) {
+                handleChange(Number(value)+1)
+            }
     }
 
     function isNumber(x) {
         return !isNaN(Number(x))
     }
 
-    useEffect(() => {
+    useEffect(() => { 
+        console.log("initial value",initialValue)
         if(initialValue !== null && initialValue >= minValue) {
             setLocalValue(initialValue)
         }
@@ -23,7 +45,7 @@ const NumericInput = ({label,minValue = 0,initialValue = 0, onChange, error=fals
     return (
         <div>
             <Stack direction="row">
-                <IconButton onClick={()=>handleChange(localValue-1)}>
+                <IconButton onClick={()=>reduceNumber(localValue)}>
                     <Remove/>
                 </IconButton>
                 <TextField
@@ -33,7 +55,7 @@ const NumericInput = ({label,minValue = 0,initialValue = 0, onChange, error=fals
                     value={localValue}
                     onChange={(e)=>handleChange(e.target.value)}
                 />
-                <IconButton onClick={()=>handleChange(localValue+1)}>
+                <IconButton onClick={()=>addNumber(localValue)}>
                     <Add/>
                 </IconButton>
             </Stack>
