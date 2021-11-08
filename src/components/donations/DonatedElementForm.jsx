@@ -7,7 +7,7 @@ import NumericInput from './NumericInput'
 /**
  * Formulario para añadir/editar un elemento donado
  */
-const DonatedElementForm = ({data,onSave,onDelete,autoSave = false}) => {
+const DonatedElementForm = ({key,data,onSave,onDelete,autoSave = false}) => {
     const [description, setDescription] = useState("")
     const [elementTags, setElementTags] = useState([])
     const [quantity,setQuantity] = useState(0)
@@ -27,8 +27,9 @@ const DonatedElementForm = ({data,onSave,onDelete,autoSave = false}) => {
                 setElementTags(data.tags)
             }
             isFirstRender.current = false;
+        } else {
+            handleSave()
         }
-        handleSave()
     }, [description,elementTags,quantity])
 
     /**
@@ -48,8 +49,11 @@ const DonatedElementForm = ({data,onSave,onDelete,autoSave = false}) => {
         setDescription(desc)
     }
 
+    /**
+     * actualiza el state de las tags
+     * @param {*} newTags el nuevo array de tags
+     */
     const handleTags = (newTags) => {
-        console.log("new tags",newTags)
         setElementTags(newTags)
     }
 
@@ -70,6 +74,7 @@ const DonatedElementForm = ({data,onSave,onDelete,autoSave = false}) => {
             "description":description,
             "tags": elementTags,
             "count":quantity,
+            "id":data !== null ? data.id : null
         }
         onSave(nElement)
     }
@@ -106,9 +111,9 @@ const DonatedElementForm = ({data,onSave,onDelete,autoSave = false}) => {
                                 initialValue={quantity}
                                 onChange={(e)=>handleQuantity(e)}
                             />
-                            <IconButton onClick={handleSave}>
+                            {/* <IconButton onClick={handleSave}>
                                 <Save />
-                            </IconButton>
+                            </IconButton> */}
                             <IconButton onClick={onDelete}>
                                 <Delete />
                             </IconButton>
