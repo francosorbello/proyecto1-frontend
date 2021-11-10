@@ -1,4 +1,4 @@
-import { Add, Delete, Edit, Title } from '@mui/icons-material'
+import { Add, Delete, Edit, Title, Visibility } from '@mui/icons-material'
 import {IconButton, Fab, Modal, Typography } from '@mui/material'
 import React, { useContext, useState, useEffect } from 'react'
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
@@ -7,6 +7,7 @@ import { Box } from '@mui/system';
 import { DonationContext } from '../../contexts/DonationContext';
 import { CampaignContext } from '../../contexts/CampaignContext';
 import DonationForm from './DonationForm';
+import DonationView from './DonationView';
 
 /** Estilo para que el FAB se vea abajo a la derecha */
 const style = {
@@ -34,13 +35,14 @@ const modalBoxStyle = {
 
 /** 
  * Muestra una tabla con las donaciones activas.
- * * @param {*} data donacion a editar
 */
-const Donations = ({data}) => {
+const Donations = ({openOnDonations=false}) => {
     const {donations, setDonations, donationStatus} = useContext(DonationContext);
     const {campaigns} = useContext(CampaignContext)
     const [editDonation, setEditDonation] = useState(null)
     const [open,setOpen] = useState(false);
+    const [openModal,setOpenModal] = useState(false);
+    const [viewDonation,setViewDonation] = useState()
 
     /**
      * Responde al click del boton de editar en una fila
@@ -51,6 +53,12 @@ const Donations = ({data}) => {
         e.stopPropagation();
         setEditDonation(cellVal.row)
         setOpen(true)
+    }
+
+    const handleViewDonation = (e,cellVal) => {
+        e.stopPropagation();
+        setViewDonation(cellVal.row)
+        setOpenModal(true)
     }
 
     /**
@@ -111,6 +119,18 @@ const Donations = ({data}) => {
             sortComparator: (v1,v2) => v1.toString().localeCompare(v2.toString()),
         },
         {
+            field: "view", 
+            headerName: "Ver",
+            width: 80,
+            renderCell: (cellValues) => {
+                return(
+                    <IconButton aria-label="Ver" onClick={(e)=>handleViewDonation(e,cellValues)}>
+                        <Visibility></Visibility>
+                    </IconButton>
+                )
+            }
+        },
+        {
             field: "edit", 
             headerName: "Editar",
             width: 80,
@@ -151,6 +171,16 @@ const Donations = ({data}) => {
                     }}
                 >
                 </DataGrid>
+                <Modal 
+                    open={openModal}
+                    onClose={()=>setOpenModal(false)}
+                    aria-labelledby="modal-wind-title"
+                >
+                    <Box sx={modalBoxStyle}>
+                        <DonationView donation={viewDonation} />
+                    </Box>
+                </Modal>
+            
                 <Fab color="primary" aria-label="add" style={style} onClick={()=>setOpen(true)}>
                     <Add />
                 </Fab>

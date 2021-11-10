@@ -12,7 +12,10 @@ import { Link, useHistory } from 'react-router-dom'
 const NavBarItem = ({ icon, title, path }) => {
 
   const handleClick = () => {
-    history.push(path)
+    history.replace(path)
+    // TODO: esto es para recargar la pag cuando clickeas el icono pero es ineficiente
+    // Buscar una mejor manera
+    history.go(0)
   }
 
   const history = useHistory()

@@ -110,7 +110,7 @@ const DonationForm = ({ data: donation, onSubmit }) => {
             setDonations(updatedDonations)
 
             // PATCH ELEMENTOS DONADOS
-            await updateDonatedElements(donationElements,nDonation["id"])
+            await patchDonatedElements(donationElements,nDonation["id"])
             onSubmit()
         }
     }
@@ -141,14 +141,46 @@ const DonationForm = ({ data: donation, onSubmit }) => {
         }
     }
 
-    const updateDonatedElements = async(elemList,donationId) => {
-        console.log("elemList",elemList)
+    const patchDonatedElements = async(elemList,donationId) => {
+        console.log("before",donationElementsCtx)
         const selectedElements = elemList.filter((elem) => elem.count > 0 && elem.description !== "")
+        //comparar entre context y elemList y
+        // 1. actualizar(+ hacer update de) los elementos que esten en ambas listas
+        // 2. eliminar(+ hacer delete de) los que esten en el context y no en elemList
+        // 3. añadir(+ hacer post de) los que esten en elemList y no en el context
+        // contiene los elementos donados iniciales
+        
+        // initialDonationElements = [10,11]
+        // // cambia a medida que añadimos o sacamos elementos donados
+        // currentDonationElements = [10,12]
+
+        // elemsToAdd = [12] //solo estan en currentDonationElements
+        // elemsToEdit = [10] //estan en ambos arrays
+        // elemsToDelete = [11] //solo estan en initialDonationElements
+
+        // finalDonationElements = [10,12]
+
+        if(selectedElements.length > 0) {
+            //post nuevos elementos
+            const elemsToAdd = []
+            
+        }
+
         if(selectedElements.length > 0) {
             // elemsToUpdate = selectedElements.filter((elem)=>)
-            selectedElements.forEach((elem)=>{
-                console.log(elem)
+            var finalElements = donationElementsCtx
+            selectedElements.forEach((donationElem)=>{
+                //busco el donated element en el context global
+                const ind = donationElementsCtx.findIndex((elem)=>elem.id === donationElem.id)
+                if(ind > -1) {
+                    // actualizar los elementos que esten en ambas listas
+                    finalElements = update(finalElements,{$splice: [[ind,1,donationElem]]})
+                } else {
+                    // añadir los que esten en elemList y no en el context
+                    // finalElements 
+                }
             })
+            console.log("after",finalElements)
         }
 
     }

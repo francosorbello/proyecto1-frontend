@@ -71,10 +71,11 @@ const DonatedElementForm = ({key,data,onSave,onDelete,autoSave = false}) => {
             return
         }
         const nElement = {
-            "description":description,
-            "tags": elementTags,
+            "id":data !== null ? data.id : null,
             "count":quantity,
-            "id":data !== null ? data.id : null
+            "tags": elementTags,
+            "description":description,
+            "donation": data !== null ? data.donation : null
         }
         onSave(nElement)
     }
