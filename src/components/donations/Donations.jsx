@@ -186,7 +186,7 @@ const Donations = ({openOnDonations=false}) => {
                 </Fab>
             </div>
             :
-                <DonationForm data={editDonation} onSubmit={()=>setOpen(false)}></DonationForm>
+                <DonationForm data={editDonation} onSubmit={()=>{setOpen(false); setEditDonation(null)}}></DonationForm>
             }
         </div>
     )
