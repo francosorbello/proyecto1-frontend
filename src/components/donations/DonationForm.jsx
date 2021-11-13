@@ -38,6 +38,7 @@ const DonationForm = ({ data: donation, onSubmit }) => {
     const [address, setAddress] = useState("")
     const [status, setStatus] = useState("")
     const [donationElements, setDonationElements] = useState([])
+    const [initialDonationElements, setInitialDonationElements] = useState([])
     const [campaign, setCampaign] = useState()
 
     useEffect(() => {
@@ -46,7 +47,7 @@ const DonationForm = ({ data: donation, onSubmit }) => {
             setStatus(donation.status)
             const camp = campaigns.find((elem) => elem.id === donation.campaignId_id)
             setCampaign(camp)
-            setDonationElements(donationElementsCtx.filter((elem) => elem.donation === donation.id))
+            setDonationElements(donation["donatedElements"])
         }
     }, [])
 
@@ -67,7 +68,6 @@ const DonationForm = ({ data: donation, onSubmit }) => {
      * @param {*} elem el nuevo elemento donado
      */
     const handleSave = (elem, index) => {
-        console.log("handle save",elem)
         const updatedDonatedElements = update(donationElements, { $splice: [[index, 1, elem]] })
         setDonationElements(updatedDonatedElements)
     }
@@ -116,12 +116,13 @@ const DonationForm = ({ data: donation, onSubmit }) => {
     }
 
     const addDonation = async () => {
-
+        console.log("adding donaion")
         //POST DE LA DONACION
         const nDonation = {
             "storageAddress": address,
             "campaignId": campaign.id,
-            "status": status
+            "status": status,
+            "donatedElements": donationElements
         }
         const res = await fetch("http://127.0.0.1:8000/api/donation-api/", {
             method: "POST",
@@ -135,14 +136,15 @@ const DonationForm = ({ data: donation, onSubmit }) => {
             const donationResp = await res.json()
             nDonation["id"] = donationResp["id"]
             setDonations([...donations, nDonation])
-
-            await addDonatedElements(donationElements,nDonation["id"])
             onSubmit()
+        } else {
+            alert("error al añadir una donacion")
+            console.log(await res.json())
         }
     }
 
     const patchDonatedElements = async(elemList,donationId) => {
-        console.log("before",donationElementsCtx)
+        console.log("before",initialDonationElements)
         const selectedElements = elemList.filter((elem) => elem.count > 0 && elem.description !== "")
         //comparar entre context y elemList y
         // 1. actualizar(+ hacer update de) los elementos que esten en ambas listas
@@ -162,8 +164,8 @@ const DonationForm = ({ data: donation, onSubmit }) => {
 
         if(selectedElements.length > 0) {
             //post nuevos elementos
-            const elemsToAdd = []
-            
+            const elemsToUpdate = initialDonationElements.filter((iniDE)=>donationElements.findIndex((de)=>iniDE.id===de.id) > -1)
+            const elemsToAdd = initialDonationElements.filter((iniDE)=>donationElements.findIndex((de)=>iniDE.id===de.id) === -1)
         }
 
         if(selectedElements.length > 0) {

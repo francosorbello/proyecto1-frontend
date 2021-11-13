@@ -1,9 +1,11 @@
 import { Chip, TextField, Typography } from '@mui/material'
-import { DataGrid, GridToolbar, getGridStringOperators, GridFilterItem, GridColDef } from '@mui/x-data-grid'
-import React, { useState, useContext } from 'react'
-import { DonationElementContext } from '../../contexts/DonationElementContext'
+import { DataGrid, GridToolbar } from '@mui/x-data-grid'
+import React, { useContext } from 'react'
 
-const tagsFilter= [
+/**
+ * Filtra los tags de una columna segun su nombre
+ */
+const tagsFilter = [
     {
         label: 'Tag Name',
         value: 'tag name',
@@ -17,7 +19,9 @@ const tagsFilter= [
     }
 ]
 
-
+/**
+ * Textfield que toma el nombre de una tag como input y la pasa al filtro
+ */
 const TagNameFilterInput = ({item,applyValue}) => {
     return (
         <div>
@@ -26,7 +30,9 @@ const TagNameFilterInput = ({item,applyValue}) => {
     )
 }
 
-
+/**
+ * Columnas de la tabla de elementos donados
+ */
 const columns = [
     {field: "description",headerName: "description", width: 150},
     {field: "count",headerName: "Cantidad", width: 150},
@@ -46,10 +52,10 @@ const columns = [
     }
 ]
 
+/**
+ * Muestra una tabla con elementos donados, junto con la direccion de la donacion
+ */
 const DonationView = ({donation}) => {
-    // const [currentDonationElems, setCurrentDonationElems] = useState([])
-    const {donationElements} = useContext(DonationElementContext)
-    const currentDonationElements = donationElements.filter((elem) => elem.donation === donation.id)
     return (
         <div>
             {
@@ -63,7 +69,7 @@ const DonationView = ({donation}) => {
                     <div style={{ display: 'flex', height: '100%' }}>
                         <div style={{ flexGrow: 1 }}>
                             <DataGrid
-                                rows={currentDonationElements}
+                                rows={donation["donatedElements"]}
                                 columns={columns}
                                 autoHeight
                                 components={{
