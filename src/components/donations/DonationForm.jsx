@@ -1,11 +1,10 @@
-import { Autocomplete, Divider, Fab, FormControl, Grid, IconButton, InputLabel, List, MenuItem, Select, Stack, TextField, Typography } from '@mui/material'
+import { Autocomplete, Divider, Fab, FormControl, Grid, IconButton, InputLabel, MenuItem, Select, Stack, TextField, Typography } from '@mui/material'
 import React, { useContext, useEffect, useState } from 'react'
 import { CampaignContext } from '../../contexts/CampaignContext'
 import { DonationContext } from '../../contexts/DonationContext'
 import DonatedElementForm from './DonatedElementForm'
 import { Add, Close, Done } from '@mui/icons-material'
 import update from 'immutability-helper';
-import { DonationElementContext } from '../../contexts/DonationElementContext'
 
 const doneFabStyle = {
     margin: 0,
@@ -33,12 +32,10 @@ const cancelFabStyle = {
  */
 const DonationForm = ({ data: donation, onSubmit }) => {
     const { donations, setDonations, donationStatus } = useContext(DonationContext)
-    const { donationElements: donationElementsCtx, setDonationElements: setDonationElementsCtx } = useContext(DonationElementContext)
     const { campaigns } = useContext(CampaignContext)
     const [address, setAddress] = useState("")
     const [status, setStatus] = useState("")
     const [donationElements, setDonationElements] = useState([])
-    const [initialDonationElements, setInitialDonationElements] = useState([])
     const [campaign, setCampaign] = useState()
 
     useEffect(() => {
@@ -80,6 +77,9 @@ const DonationForm = ({ data: donation, onSubmit }) => {
         setDonationElements(donationElements.filter((elem, index) => index !== id))
     }
 
+    /**
+     * Añade o edita una donacion, segun el uso que se le esté dando al form
+     */
     const handleSubmit = (e) => {
         e.preventDefault();
         if (donation === null) {
@@ -88,6 +88,10 @@ const DonationForm = ({ data: donation, onSubmit }) => {
             editDonation();
         }
     }
+
+    /**
+     * Envia los datos para editar una donacion en backend y actualiza el context de las donaciones
+     */
     const editDonation = async () => {
         //PUT DE LA DONACION
         const selectedElements = donationElements.filter((elem) => elem.count > 0 && elem.description !== "")
@@ -119,6 +123,9 @@ const DonationForm = ({ data: donation, onSubmit }) => {
         }
     }
 
+    /**
+     * Envia los datos para añadir una donacion en backend y actualiza el context de las donaciones
+     */
     const addDonation = async () => {
         //POST DE LA DONACION
         const selectedElements = donationElements.filter((elem) => elem.count > 0 && elem.description !== "")
