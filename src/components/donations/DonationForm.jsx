@@ -106,8 +106,10 @@ const DonationForm = ({ data: donation, onSubmit }) => {
         })
         if (res.status === 200) {
             //actualizo la donacion en el context
+            const resJ = await res.json()
             const donationIndex = donations.findIndex((elem) => elem.id === donation.id)
             nDonation["id"] = donation.id
+            nDonation["donatedElements"].map((elem,index) => elem["id"]=resJ["donatedElemIds"][index])
             const updatedDonations = update(donations, { $splice: [[donationIndex, 1, nDonation]] })
             setDonations(updatedDonations)
             onSubmit()
@@ -118,7 +120,6 @@ const DonationForm = ({ data: donation, onSubmit }) => {
     }
 
     const addDonation = async () => {
-        console.log("adding donaion")
         //POST DE LA DONACION
         const selectedElements = donationElements.filter((elem) => elem.count > 0 && elem.description !== "")
         const nDonation = {
@@ -138,77 +139,12 @@ const DonationForm = ({ data: donation, onSubmit }) => {
             //actualizo status global donaciones
             const donationResp = await res.json()
             nDonation["id"] = donationResp["id"]
+            nDonation["donatedElements"].map((elem,index) => elem["id"]=donationResp["donatedElemIds"][index])
             setDonations([...donations, nDonation])
             onSubmit()
         } else {
             alert("error al añadir una donacion")
             console.log(await res.json())
-        }
-    }
-
-    const patchDonatedElements = async (elemList, donationId) => {
-        console.log("before", initialDonationElements)
-        const selectedElements = elemList.filter((elem) => elem.count > 0 && elem.description !== "")
-        //comparar entre context y elemList y
-        // 1. actualizar(+ hacer update de) los elementos que esten en ambas listas
-        // 2. eliminar(+ hacer delete de) los que esten en el context y no en elemList
-        // 3. añadir(+ hacer post de) los que esten en elemList y no en el context
-        // contiene los elementos donados iniciales
-
-        // initialDonationElements = [10,11]
-        // // cambia a medida que añadimos o sacamos elementos donados
-        // currentDonationElements = [10,12]
-
-        // elemsToAdd = [12] //solo estan en currentDonationElements
-        // elemsToEdit = [10] //estan en ambos arrays
-        // elemsToDelete = [11] //solo estan en initialDonationElements
-
-        // finalDonationElements = [10,12]
-
-        if (selectedElements.length > 0) {
-            //post nuevos elementos
-            const elemsToUpdate = initialDonationElements.filter((iniDE) => donationElements.findIndex((de) => iniDE.id === de.id) > -1)
-            const elemsToAdd = initialDonationElements.filter((iniDE) => donationElements.findIndex((de) => iniDE.id === de.id) === -1)
-        }
-
-        if (selectedElements.length > 0) {
-            // elemsToUpdate = selectedElements.filter((elem)=>)
-            var finalElements = donationElementsCtx
-            selectedElements.forEach((donationElem) => {
-                //busco el donated element en el context global
-                const ind = donationElementsCtx.findIndex((elem) => elem.id === donationElem.id)
-                if (ind > -1) {
-                    // actualizar los elementos que esten en ambas listas
-                    finalElements = update(finalElements, { $splice: [[ind, 1, donationElem]] })
-                } else {
-                    // añadir los que esten en elemList y no en el context
-                    // finalElements 
-                }
-            })
-            console.log("after", finalElements)
-        }
-
-    }
-
-    const addDonatedElements = async (elemList, donationId) => {
-        //POST DE LOS ELEMENTOS DONADOS
-        const selectedElements = elemList.filter((elem) => elem.count > 0 && elem.description !== "")
-        if (selectedElements.length > 0) {
-            selectedElements.forEach((elem) => elem["donation"] = donationId)
-            const res2 = await fetch("http://127.0.0.1:8000/api/donatedElement-api/", {
-                method: "POST",
-                headers: {
-                    'Content-type': 'application/json',
-                },
-                body: JSON.stringify(selectedElements)
-            })
-            if (res2.status === 200) {
-                const resJ = await res2.json();
-                const ids = resJ["ids"]
-                selectedElements.forEach((elem, index) => elem["id"] = ids[index])
-                console.log("selected elems", selectedElements)
-                setDonationElementsCtx([...donationElementsCtx, selectedElements])
-            }
         }
     }
 
