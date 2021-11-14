@@ -16,6 +16,9 @@ const style = {
     position: 'fixed',
 };
 
+/**
+ * Estilo de la ventana modal que muestra el formulario para añadir/editar campañas
+ */
 const modalBoxStyle = {
     position: 'absolute',
     top: '50%',
@@ -57,6 +60,12 @@ const Campaigns = () => {
         setOpen(true)
     }
 
+    /**
+     * Elimina una campaña de la base de datos y actualiza el context
+     * @param {*} e evento generado al clickear el boton de borrar
+     * @param {*} cellVal los valores de la fila seleccionada
+     * @returns 
+     */
     const handleDelete = async (e,cellVal) => {
         e.stopPropagation();
         if(!window.confirm("Deseas borrar la campaña?")) {
@@ -77,7 +86,10 @@ const Campaigns = () => {
             console.log(await res.json())
         }
     }
-    /** Campos de las columnas */
+
+    /** 
+     * Campos de las columnas 
+    */
     const columns = [
         //el field de las columnas tiene que matchear con los nombres de los valores del server
         //ej: en el server, la fecha de fin se almacena en "endDate". 

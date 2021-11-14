@@ -29,8 +29,13 @@ const style = {
     border: '2px solid #000',
     boxShadow: 24,
     p: 4,
-  };
+};
 
+/**
+ * Formulario para añadir y editar campañas
+ * @param {*} campaign campaña que se quiere editar 
+ * @param {*} onSubmit evento que se ejecuta al enviar los datos al backend
+ */
 const CampaignForm = ({campaign, onSubmit}) => {
     /** states del componente */
     const [campaignName, setCampaignName] = useState("");
@@ -39,6 +44,11 @@ const CampaignForm = ({campaign, onSubmit}) => {
     const [endDate, setEndDate] = useState(new Date());
     const {campaigns,setCampaigns} = useContext(CampaignContext);
 
+    /**
+     * Formatea una fecha para que sea almacenada correctamente por la base de datos
+     * @param {*} date la fecha a formatear
+     * @returns la fecha en formato YYYY-mm-dd
+     */
     const formatDate = (date) => {
         const year = date.getFullYear();
 
@@ -89,6 +99,9 @@ const CampaignForm = ({campaign, onSubmit}) => {
         }
     }
 
+    /**
+     * Actualiza los datos de una campaña y los almacena en el context global
+     */
     const editCampaign = async() => {
         const nCampaign = {
             "name": campaignName,
