@@ -192,7 +192,7 @@ const DonationForm = ({ data: donation, onSubmit }) => {
                             >
                                 {
                                     donationStatus.map(
-                                        ({ 0: id, 1: name }) => <MenuItem key={id} value={id}>{name}</MenuItem>
+                                        ({ 0: id, 1: name },index) => <MenuItem key={index} value={id}>{name}</MenuItem>
                                     )
                                 }
                             </Select>

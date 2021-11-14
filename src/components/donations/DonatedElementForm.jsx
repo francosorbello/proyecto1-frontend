@@ -90,6 +90,7 @@ const DonatedElementForm = ({key,data,onSave,onDelete,autoSave = false}) => {
                             value={description}
                             fullWidth
                             onChange={(e)=>{e.preventDefault();handleDescription(e.target.value);}}
+                            onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
                         />
                     </Grid>
                     <Grid item sm={4} md={4} lg={4}>
@@ -102,6 +103,7 @@ const DonatedElementForm = ({key,data,onSave,onDelete,autoSave = false}) => {
                             getOptionLabel={(option)=>option.name}
                             renderInput={(params)=>(<TextField {...params} label="Tags"/>)}
                             onChange={(e,params)=>{e.preventDefault(); handleTags(params);}}
+                            onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
                         />
                     </Grid>
                     <Grid item sm={4} md={4} lg={4}>
