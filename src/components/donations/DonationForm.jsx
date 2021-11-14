@@ -210,7 +210,7 @@ const DonationForm = ({ data: donation, onSubmit }) => {
                 </Grid>
                 {/* Seccion de elementos donados */}
                 <Divider sx={{ padding: 1 }} />
-                <Typography sx={{ color: "#1976D2", fontSize: 20, paddingTop: 1 }}>Elementos donados</Typography>
+                <Typography sx={{ color: "#1976D2", fontSize: 20, paddingTop: 1, paddingBottom: 1 }}>Elementos donados</Typography>
                 <Stack spacing={3}>
                     {
                         donationElements.map((elem, index) => <DonatedElementForm

@@ -1,7 +1,7 @@
 import { Chip, TextField, Typography } from '@mui/material'
 import { DataGrid, GridToolbar } from '@mui/x-data-grid'
 import React, { useContext } from 'react'
-
+import { DonationContext } from '../../contexts/DonationContext'
 /**
  * Filtra los tags de una columna segun su nombre
  */
@@ -56,6 +56,7 @@ const columns = [
  * Muestra una tabla con elementos donados, junto con la direccion de la donacion
  */
 const DonationView = ({donation}) => {
+    const {donationStatus} = useContext(DonationContext)
     return (
         <div>
             {
@@ -63,8 +64,12 @@ const DonationView = ({donation}) => {
                 <></>
                 : 
                 <div>
-                    <Typography sx={{paddingBottom: 4}} id="modal-wind-title" variant="h6" component="h2">
-                        {donation.storageAddress}                                
+                    <Typography sx={{paddingBottom: 4}} id="modal-wind-title" variant="h4" component="h2">
+                        {donation.storageAddress}
+                    </Typography>
+                    
+                    <Typography sx={{paddingBottom: 4}} id="modal-wind-status" variant="h6" component="h3">
+                        {donationStatus.filter((elem)=>elem[0]===donation.status)[0][1]}
                     </Typography>
                     <div style={{ display: 'flex', height: '100%' }}>
                         <div style={{ flexGrow: 1 }}>
