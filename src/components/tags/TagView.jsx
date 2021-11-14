@@ -4,12 +4,18 @@ import React,{useContext, useState} from 'react'
 import { TagContext } from '../../contexts/TagContext'
 import TagList from './TagList';
 
+/**
+ * Formulario para añadir, borrar y ver tags disponibles
+ */
 const TagView = () => {
     const {tags, setTags} = useContext(TagContext)
     const [newTag,setNewTag] = useState("");
 
+    /**
+     * Elimina un tag de la base de datos y actualiza el context
+     * @param {*} tag el tag a eliminar
+     */
     const handleTagDelete = async (tag) => {
-        console.log("delete tag",tag)
         const res = await fetch(`http://127.0.0.1:8000/api/tag-api/${tag.id}/`,{
             method: "DELETE",
             headers: {
@@ -25,6 +31,10 @@ const TagView = () => {
         }
     }
 
+    /**
+     * Crea un nuevo tag y actualiza el context
+     * @param {*} e evento generado al hacer submit
+     */
     const handleSubmit = async (e) => {
         e.preventDefault();
         if(newTag !== "") {
@@ -65,7 +75,7 @@ const TagView = () => {
                         >
                         </TextField>
                     </form>
-                    <IconButton>
+                    <IconButton onClick={handleSubmit}>
                         <Save></Save>
                     </IconButton>
                 </Stack>

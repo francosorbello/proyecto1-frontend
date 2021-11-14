@@ -2,6 +2,12 @@ import React from 'react'
 import Chip from '@mui/material/Chip';
 import { Container } from '@mui/material';
 
+/**
+ * Muestra los tags disponibles
+ * @param {*} tags lista de tags a mostrar
+ * @param {*} onDelete evento generado al clickear el boton de borrar un tag
+ * @returns 
+ */
 const TagList = ({ tags,onDelete }) => {
     return (
         <div>
