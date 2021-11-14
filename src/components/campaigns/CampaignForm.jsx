@@ -77,7 +77,7 @@ const CampaignForm = ({campaign, onSubmit}) => {
                 "id": resJ["id"],
                 "name": nCampaign.name,
                 "description": nCampaign.description,
-                "initialDate": nCampaign.initalDate,
+                "initialDate": nCampaign.initialDate,
                 "endDate": nCampaign.endDate,
             }
             //actualizo el context global
@@ -90,8 +90,6 @@ const CampaignForm = ({campaign, onSubmit}) => {
     }
 
     const editCampaign = async() => {
-        console.log("editing campaign")
-        console.log(campaign.id)
         const nCampaign = {
             "name": campaignName,
             "description": description,
@@ -130,7 +128,8 @@ const CampaignForm = ({campaign, onSubmit}) => {
     
     /**Si hay una campaña de entrada, setea los valores para que podamos editar */
     useEffect(() => {
-        if(campaign != null){
+        if(campaign !== null){
+            console.log("editing campaign",campaign)
             setCampaignName(campaign.name)
             setDescription(campaign.description)
             setInitialDate(new Date(campaign.initialDate))
@@ -146,7 +145,8 @@ const CampaignForm = ({campaign, onSubmit}) => {
                         <TextField
                             label="Nombre"
                             fullWidth={true}
-                            onChange={(e)=>setCampaignName(e.target.value)}
+                            onChange={(e) =>setCampaignName(e.target.value)}
+                            onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
                             value={campaignName}
                         >
                         </TextField>
@@ -158,6 +158,7 @@ const CampaignForm = ({campaign, onSubmit}) => {
                             minRows={5}
                             fullWidth={true}
                             onChange={(e)=>setDescription(e.target.value)}
+                            onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
                             value={description}
                         >
                         </TextField>

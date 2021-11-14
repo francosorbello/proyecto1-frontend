@@ -113,7 +113,7 @@ const DonationForm = ({ data: donation, onSubmit }) => {
             const resJ = await res.json()
             const donationIndex = donations.findIndex((elem) => elem.id === donation.id)
             nDonation["id"] = donation.id
-            nDonation["donatedElements"].map((elem,index) => elem["id"]=resJ["donatedElemIds"][index])
+            nDonation["donatedElements"].map((elem, index) => elem["id"] = resJ["donatedElemIds"][index])
             const updatedDonations = update(donations, { $splice: [[donationIndex, 1, nDonation]] })
             setDonations(updatedDonations)
             onSubmit()
@@ -146,7 +146,7 @@ const DonationForm = ({ data: donation, onSubmit }) => {
             //actualizo status global donaciones
             const donationResp = await res.json()
             nDonation["id"] = donationResp["id"]
-            nDonation["donatedElements"].map((elem,index) => elem["id"]=donationResp["donatedElemIds"][index])
+            nDonation["donatedElements"].map((elem, index) => elem["id"] = donationResp["donatedElemIds"][index])
             setDonations([...donations, nDonation])
             onSubmit()
         } else {
