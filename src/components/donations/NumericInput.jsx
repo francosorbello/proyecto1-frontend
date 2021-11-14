@@ -79,6 +79,7 @@ const NumericInput = ({label,minValue = 0,initialValue = 0, onChange,allowEmpty 
                     label={label}
                     value={localValue}
                     onChange={(e)=>handleChange(e.target.value)}
+                    onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
                 />
                 <IconButton onClick={()=>addNumber(localValue)}>
                     <Add/>

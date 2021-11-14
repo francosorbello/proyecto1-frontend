@@ -6,6 +6,9 @@ import DonatedElementForm from './DonatedElementForm'
 import { Add, Close, Done } from '@mui/icons-material'
 import update from 'immutability-helper';
 
+/**
+ * Estilo del boton de finalizar formulario.
+ */
 const doneFabStyle = {
     margin: 0,
     top: 'auto',
@@ -15,6 +18,9 @@ const doneFabStyle = {
     position: 'fixed',
 };
 
+/**
+ * Estilo del boton de cancelar formulario
+ */
 const cancelFabStyle = {
     margin: 0,
     top: 'auto',
@@ -165,6 +171,7 @@ const DonationForm = ({ data: donation, onSubmit }) => {
                             fullWidth
                             value={address}
                             onChange={(e) => setAddress(e.target.value)}
+                            onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
                         />
                     </Grid>
                     <Grid item sm={6} md={6} lg={6}>
@@ -176,6 +183,7 @@ const DonationForm = ({ data: donation, onSubmit }) => {
                             renderInput={(params) => <TextField {...params} label="Campaña" />}
                             onChange={(e, option) => setCampaign(option)}
                             value={campaign || null}
+                            onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
                         >
                         </Autocomplete>
                     </Grid>
@@ -188,11 +196,12 @@ const DonationForm = ({ data: donation, onSubmit }) => {
                                 label="Status"
                                 id="status-name-select"
                                 onChange={(e) => { e.preventDefault(); setStatus(e.target.value); }}
+                                onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
                                 value={status}
                             >
                                 {
                                     donationStatus.map(
-                                        ({ 0: id, 1: name },index) => <MenuItem key={index} value={id}>{name}</MenuItem>
+                                        ({ 0: id, 1: name }, index) => <MenuItem key={index} value={id}>{name}</MenuItem>
                                     )
                                 }
                             </Select>
