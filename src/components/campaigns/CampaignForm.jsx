@@ -81,7 +81,8 @@ const CampaignForm = ({campaign, onSubmit}) => {
             },
             body: JSON.stringify(nCampaign)
         })
-        if(res.status == "200") {
+        console.log(res.status === 200)
+        if(res.status === 200) {
             const resJ = await res.json();
             const campaignFormat = {
                 "id": resJ["id"],
@@ -93,9 +94,12 @@ const CampaignForm = ({campaign, onSubmit}) => {
             //actualizo el context global
             onSubmit(campaignFormat)
             setCampaigns([...campaigns,campaignFormat])
-
+        } else if (res.status===400){
+            alert("La fecha de incio es mayor a la de fin.")
+            onSubmit(null)
         } else {
             alert("Hubo un problema al conectarse con la base de datos.")
+            onSubmit(null)
         }
     }
 

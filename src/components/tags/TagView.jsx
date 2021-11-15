@@ -55,9 +55,14 @@ const TagView = () => {
 
                 setTags([...tags,nTag])
                 setNewTag("")
+                return;
             }
-            else {
-                alert("Hubo un problema al añadir el tag")
+            if(res.status== "400"){
+                alert("El tag que quieres crear ya existe.")
+                console.log(await res.json())
+            }
+            if(res.status=="500"){
+                alert("Hubo un problema al crear el tag.")
                 console.log(await res.json())
             }
         }
