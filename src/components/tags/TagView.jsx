@@ -77,6 +77,7 @@ const TagView = () => {
                             label="Nombre"
                             onChange={(e)=>setNewTag(e.target.value)}
                             value={newTag}
+                            data-testid="tag-name-textfield"
                         >
                         </TextField>
                     </form>
