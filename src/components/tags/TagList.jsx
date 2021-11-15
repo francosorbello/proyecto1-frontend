@@ -1,6 +1,7 @@
 import React from 'react'
 import Chip from '@mui/material/Chip';
 import { Container } from '@mui/material';
+import { Cancel, Delete } from '@mui/icons-material';
 
 /**
  * Muestra los tags disponibles
@@ -11,11 +12,22 @@ import { Container } from '@mui/material';
 const TagList = ({ tags,onDelete }) => {
     return (
         <div>
-            <Container>
-                {tags.map(
-                    (tag) => <Chip key={tag.id} label={tag.name} onDelete={() => onDelete(tag)}></Chip>
-                )}
-            </Container>
+            {
+                tags===undefined ? 
+                <div></div>
+                :
+                <Container>
+                    {tags.map(
+                        (tag) => <Chip 
+                                    key={tag.id} 
+                                    label={tag.name} 
+                                    onDelete={() => onDelete(tag)}
+                                    deleteIcon={<Cancel data-testid="delete-icon" />}
+                                >
+                                </Chip>
+                    )}
+                </Container>
+            }
         </div>
     )
 }
