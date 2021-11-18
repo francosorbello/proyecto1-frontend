@@ -43,6 +43,7 @@ const CampaignForm = ({campaign, onSubmit}) => {
     const [initialDate, setInitialDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
     const {campaigns,setCampaigns} = useContext(CampaignContext);
+    const {validationError,setValidationError} = useState(false)
 
     /**
      * Formatea una fecha para que sea almacenada correctamente por la base de datos
@@ -81,7 +82,6 @@ const CampaignForm = ({campaign, onSubmit}) => {
             },
             body: JSON.stringify(nCampaign)
         })
-        console.log(res.status === 200)
         if(res.status === 200) {
             const resJ = await res.json();
             const campaignFormat = {
@@ -146,7 +146,6 @@ const CampaignForm = ({campaign, onSubmit}) => {
     /**Si hay una campaña de entrada, setea los valores para que podamos editar */
     useEffect(() => {
         if(campaign !== null){
-            console.log("editing campaign",campaign)
             setCampaignName(campaign.name)
             setDescription(campaign.description)
             setInitialDate(new Date(campaign.initialDate))
@@ -159,14 +158,20 @@ const CampaignForm = ({campaign, onSubmit}) => {
             <form autoComplete="off" onSubmit={handleSubmit}>
                 <Grid container spacing={3}>
                     <Grid item sm={12} md={12} lg={12}>
+                        <div  aria-labelledby="Nombre" >
                         <TextField
                             label="Nombre"
+                            aria-labelledby="Nombre"
+                            error={campaignName==="" && validationError}
+                            required
                             fullWidth={true}
                             onChange={(e) =>setCampaignName(e.target.value)}
                             onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
                             value={campaignName}
+                            inputProps={{"data-testid": "campaign-title"}}
                         >
                         </TextField>
+                        </div>
                     </Grid>
                     <Grid item sm={12} md={12} lg={12}>
                         <TextField
@@ -177,6 +182,7 @@ const CampaignForm = ({campaign, onSubmit}) => {
                             onChange={(e)=>setDescription(e.target.value)}
                             onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
                             value={description}
+                            inputProps={{"data-testid": "campaign-description"}}
                         >
                         </TextField>
                     </Grid>
