@@ -21,7 +21,8 @@ const NumericInput = ({label,minValue = 0,initialValue = 0, onChange,allowEmpty 
             return
         }
         if(isNumber(newValue)) {
-            const finalValue = newValue < minValue ? minValue : newValue
+            // const finalValue = newValue < minValue ? minValue : newValue
+            const finalValue = newValue
             setLocalValue(finalValue)
             // console.log(finalValue <= minValue)
             setError(finalValue < minValue)
@@ -74,7 +75,8 @@ const NumericInput = ({label,minValue = 0,initialValue = 0, onChange,allowEmpty 
                     <Remove/>
                 </IconButton>
                 <TextField
-                    error={error}
+                    required
+                    error={error || localValue === 0}
                     type="numeric"
                     label={label}
                     value={localValue}

@@ -169,6 +169,7 @@ const DonationForm = ({ data: donation, onSubmit }) => {
                         <TextField
                             label="Dirección"
                             fullWidth
+                            required
                             value={address}
                             onChange={(e) => setAddress(e.target.value)}
                             onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
@@ -179,8 +180,9 @@ const DonationForm = ({ data: donation, onSubmit }) => {
                             autoHighlight
                             id="select-campaign"
                             options={campaigns}
+                            required
                             getOptionLabel={(option) => option.name}
-                            renderInput={(params) => <TextField {...params} label="Campaña" />}
+                            renderInput={(params) => <TextField required {...params} label="Campaña" />}
                             onChange={(e, option) => setCampaign(option)}
                             value={campaign || null}
                             onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
@@ -188,9 +190,10 @@ const DonationForm = ({ data: donation, onSubmit }) => {
                         </Autocomplete>
                     </Grid>
                     <Grid item xs={6} sm={6} md={6}>
-                        <FormControl fullWidth>
+                        <FormControl fullWidth required>
                             <InputLabel id="status-name-label">Status</InputLabel>
                             <Select
+                                
                                 fullWidth={true}
                                 labelId="status-name-label"
                                 label="Status"

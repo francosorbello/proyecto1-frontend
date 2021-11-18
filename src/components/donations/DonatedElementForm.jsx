@@ -91,6 +91,7 @@ const DonatedElementForm = ({key,data,onSave,onDelete,autoSave = false}) => {
                             fullWidth
                             onChange={(e)=>{e.preventDefault();handleDescription(e.target.value);}}
                             onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
+                            required
                         />
                     </Grid>
                     <Grid item sm={4} md={4} lg={4}>
