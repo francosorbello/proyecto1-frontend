@@ -57,7 +57,7 @@ describe("<CampaignForm />",()=>{
         const component = render(<CampaignContext><CampaignForm campaign = {campaigns[0]}></CampaignForm></CampaignContext>)
         const description = screen.getByTestId("campaign-description")
         userEvent.type(description," nuevos valores 123#|-@")
-        expect(description).toHaveValue(campaigns[0].description+" nuevos valoress 123#|-@")
+        expect(description).toHaveValue(campaigns[0].description+" nuevos valores 123#|-@")
 
     })
 })
