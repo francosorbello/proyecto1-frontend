@@ -13,7 +13,7 @@ const TagContextProvider = (props) => {
 
     useEffect(() => {
         const getTags = async () => {
-            const data = await fetchTags()
+            const data = await fetchTags().catch(()=>[])
             setTags(data)
         }
         getTags();
