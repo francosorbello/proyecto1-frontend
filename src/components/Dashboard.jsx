@@ -15,7 +15,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { Campaign as CampaignIcon, Dashboard as DashboardIcon, MarkunreadMailbox, Tag as TagIcon} from '@mui/icons-material';
 import NavBarItem from './NavBarItem';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, useHistory } from 'react-router-dom';
 import Campaigns from "./campaigns/Campaigns"
 import CampaignContextProvider from '../contexts/CampaignContext';
 import DashboardContent from './DashboardContent';
@@ -80,9 +80,14 @@ const mdTheme = createTheme();
 /** Renderiza el appbar que contiene los links para ir a las distintas partes del sistema */
 export default function Dashboard() {
   const [open, setOpen] = React.useState(false);
+  const history = useHistory()
   const toggleDrawer = () => {
     setOpen(!open);
   };
+
+  React.useEffect(()=>{
+    history.push("/dashboard/campañas");
+  },[])
 
   return (
     <ThemeProvider theme={mdTheme}>
