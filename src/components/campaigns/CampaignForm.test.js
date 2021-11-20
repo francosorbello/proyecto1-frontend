@@ -25,11 +25,16 @@ const campaigns = [
 
 describe("<CampaignForm />",()=>{
     it("renderiza la vista del formulario",()=>{
-        const component = render(<CampaignContext><CampaignForm campaign = {campaigns[0]}></CampaignForm></CampaignContext>)
+        const component = render(<CampaignContext><CampaignForm campaign = {null}></CampaignForm></CampaignContext>)
     })
     
-    it("renderiza sin datos",()=>{
-        const component = render(<CampaignContext><CampaignForm campaign = {null}></CampaignForm></CampaignContext>)
+    it("renderiza los valores de una campaña de entrada",()=>{
+        const testCampaign = campaigns[0]
+        const component = render(<CampaignContext><CampaignForm campaign = {testCampaign}></CampaignForm></CampaignContext>)
+        const title = screen.getByTestId("campaign-title")
+        const description = screen.getByTestId("campaign-description")
+        expect(title).toHaveValue(testCampaign.name)
+        expect(description).toHaveValue(testCampaign.description)
     })
 
     it("titulo acepta datos",()=>{

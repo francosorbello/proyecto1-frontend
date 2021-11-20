@@ -45,6 +45,10 @@ const CampaignForm = ({campaign, onSubmit}) => {
     const {campaigns,setCampaigns} = useContext(CampaignContext);
     const {validationError,setValidationError} = useState(false)
 
+    const validDates = (iniDate, finDate) => {
+        return iniDate < finDate;
+    }
+
     /**
      * Formatea una fecha para que sea almacenada correctamente por la base de datos
      * @param {*} date la fecha a formatear
@@ -67,8 +71,10 @@ const CampaignForm = ({campaign, onSubmit}) => {
      * el context global
      */
     const createCampaign = async () => {
-        //TODO: verificar que los campos esten completados
-        console.log("creating campaign")
+        if(formatDate(initialDate) > formatDate(endDate)) {
+            alert("Verifica que la fecha de inicio se menor a la fecha de fin.")
+            return;
+        }
         const nCampaign = {
             "name": campaignName,
             "description": description,
@@ -107,6 +113,10 @@ const CampaignForm = ({campaign, onSubmit}) => {
      * Actualiza los datos de una campaña y los almacena en el context global
      */
     const editCampaign = async() => {
+        if(formatDate(initialDate) > formatDate(endDate)) {
+            alert("Verifica que la fecha de inicio se menor a la fecha de fin.")
+            return;
+        }
         const nCampaign = {
             "name": campaignName,
             "description": description,
@@ -126,10 +136,12 @@ const CampaignForm = ({campaign, onSubmit}) => {
             const updatedCampaigns = update(campaigns,{$splice: [[indx,1,nCampaign]]})
             setCampaigns(updatedCampaigns)
             onSubmit(nCampaign)
+        } else if (res.status===400){
+            alert("La fecha de incio es mayor a la de fin.")
+            onSubmit(null)
         } else {
-            alert("Error en la base de datos")
-            console.log(await res.json())
-            // onSubmit(null)
+            alert("Hubo un problema al conectarse con la base de datos.")
+            onSubmit(null)
         }
     }
 
