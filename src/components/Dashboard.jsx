@@ -156,6 +156,7 @@ export default function Dashboard() {
         >
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+              <Switch>
                 <Route path="/dashboard/campañas" exact={true}>
                   <DashboardContent title="Campañas">
                     <CampaignContextProvider>
@@ -177,15 +178,10 @@ export default function Dashboard() {
                     </TagContextProvider>
                   </DashboardContent>
                 </Route>
+              </Switch>
           </Container>
         </Box>
       </Box>
     </ThemeProvider>
   );
 }
-
-const Test = () => <div ><h1>Prueba Routes</h1></div>
-
-// export default function Dashboard() {
-//   return <DashboardContent />;
-// }

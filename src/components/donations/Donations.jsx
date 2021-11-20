@@ -112,8 +112,8 @@ const Donations = ({openOnDonations=false}) => {
             headerName: "Campaña", 
             width: 230,
             valueGetter: (params) => {
-                const campaignId = params.row.campaignId_id
-                const fullCampaign = campaigns.filter((item)=>item.id == campaignId)
+                const campaignId = params.row.campaignId
+                const fullCampaign = campaigns.filter((item)=>item.id === campaignId)
                 return fullCampaign.length > 0 ? fullCampaign[0].name : campaignId;
             },
             sortComparator: (v1,v2) => v1.toString().localeCompare(v2.toString()),
