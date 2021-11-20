@@ -15,7 +15,7 @@ const NavBarItem = ({ icon, title, path }) => {
     history.replace(path)
     // TODO: esto es para recargar la pag cuando clickeas el icono pero es ineficiente
     // Buscar una mejor manera
-    history.go(0)
+    // history.go(0)
   }
 
   const history = useHistory()
