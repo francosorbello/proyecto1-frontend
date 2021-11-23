@@ -18,3 +18,7 @@ Abrir [http://localhost:3000](http://localhost:3000) para verla en el navegador.
 ### `npm test`
 
 Ejecuta los tests.
+
+### `npm run docs`
+
+Genera la documentación.
